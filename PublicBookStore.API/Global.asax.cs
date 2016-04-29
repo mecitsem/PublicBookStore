@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PublicBookStore.API.App_Start;
+using PublicBookStore.API.Initializer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,6 +15,7 @@ namespace PublicBookStore.API
     {
         protected void Application_Start()
         {
+            DataConfig.Initialize();
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
