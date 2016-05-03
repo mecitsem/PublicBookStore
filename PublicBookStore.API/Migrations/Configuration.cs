@@ -1,19 +1,21 @@
-﻿using PublicBookStore.API.DB;
-using PublicBookStore.API.Models;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PublicBookStore.API.Initializer
+namespace PublicBookStore.API.Migrations
 {
-    public class PublicBookStoreSampleData : DropCreateDatabaseIfModelChanges<PublicBookStoreEntities>
-    {
-        protected override void Seed(PublicBookStoreEntities context)
-        {
+    using Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
 
+    internal sealed class Configuration : DbMigrationsConfiguration<PublicBookStore.API.Data.PublicBookStoreEntities>
+    {
+        public Configuration()
+        {
+            AutomaticMigrationsEnabled = false;
+        }
+
+        protected override void Seed(PublicBookStore.API.Data.PublicBookStoreEntities context)
+        {
             //GENRES
             var genres = new List<Genre>
             {
@@ -29,6 +31,9 @@ namespace PublicBookStore.API.Initializer
                 new Genre { Name = "Realistic fiction" }
             };
 
+            genres.ForEach(g => context.Genres.AddOrUpdate(g));
+            context.SaveChanges();
+
             //AUTHORS
             var authors = new List<Author>
             {
@@ -41,16 +46,11 @@ namespace PublicBookStore.API.Initializer
                 new Author { Name = "Scott Pratt" },
                 new Author { Name = "Stephen King" }
             };
-
+            authors.ForEach(a => context.Authors.AddOrUpdate(a));
+            context.SaveChanges();
 
             //BOOKS
-            new List<Book>
-            {
-              new Book() { Title="End of Watch", Author = authors.Single(a=>a.Name.Equals("Stephen King")),Genre = genres.Single(g=>g.Equals("Novel")),ImageUrl = "/Content/BookImages/endofwatch.jpg",Published = new DateTime(2016,7,1) }
-
-            }.ForEach(b => context.Books.Add(b));
-
-
+            
         }
     }
 }

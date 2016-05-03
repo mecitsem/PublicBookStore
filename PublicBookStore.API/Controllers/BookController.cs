@@ -1,6 +1,4 @@
-﻿using PublicBookStore.API.Data;
-using PublicBookStore.API.Interfaces;
-using PublicBookStore.API.Models;
+﻿using PublicBookStore.API.Models;
 using PublicBookStore.API.Repositories;
 using System;
 using System.Collections.Generic;
@@ -11,23 +9,25 @@ using System.Web.Http;
 
 namespace PublicBookStore.API.Controllers
 {
-    public class ValuesController : ApiController
+    public class BookController : ApiController
     {
-        private BookRepository repo = new BookRepository();
+        private BookRepository _bookRepo;
 
-        // GET api/values
-        public IEnumerable<Genre> Get()
+        public BookController()
         {
-            return repo.Genres();
+            _bookRepo = new BookRepository();
         }
 
-        // GET api/values/5
-        public string Get(int id)
+        public IEnumerable<Book> Get()
         {
-            return "hello" + id;
+            return _bookRepo.GetBooks();
         }
 
-        // POST api/values
+        public Book Get(int id)
+        {
+            return _bookRepo.GetBook(id);
+        }
+
         public void Post([FromBody]string value)
         {
         }

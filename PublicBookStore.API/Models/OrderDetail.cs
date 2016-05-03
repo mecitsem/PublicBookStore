@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PublicBookStore.API.Models
 {
     public class OrderDetail
     {
-        [Key]
+
         public int OrderDetailId { get; set; }
         public int OrderId { get; set; }
         public int AlbumId { get; set; }
