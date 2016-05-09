@@ -13,12 +13,12 @@ namespace PublicBookStore.API.Controllers
 {
     public class ValuesController : ApiController
     {
-        private BookRepository repo = new BookRepository();
+
 
         // GET api/values
-        public IEnumerable<Genre> Get()
+        public string Get()
         {
-            return repo.Genres();
+            return "hello world";
         }
 
         // GET api/values/5

@@ -25,7 +25,32 @@ namespace PublicBookStore.API.Controllers
 
         public Genre Get(int id)
         {
-            return _genreRepo.GetGenre(id);
+            var genre = _genreRepo.GetGenre(id);
+            if (genre == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            return genre;
         }
+
+        public void Post(Genre genre)
+        {
+            _genreRepo.AddOrUpdate(genre);
+            _genreRepo.SaveChanges();
+        }
+
+        public void Put(int id)
+        {
+            var genre = _genreRepo.GetGenre(id);
+            if (genre == null)
+                throw new HttpResponseException(HttpStatusCode.NoContent);
+            _genreRepo.AddOrUpdate(genre);
+            _genreRepo.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            _genreRepo.Delete(id);
+            _genreRepo.SaveChanges();
+        }
+
     }
 }

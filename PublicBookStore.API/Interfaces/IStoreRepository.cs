@@ -9,9 +9,9 @@ namespace PublicBookStore.API.Interfaces
 {
     public interface IStoreRepository : IDisposable
     {
-        IEnumerable<Book> GetBooks();
-        Book GetBook(int bookId);
-        IEnumerable<Book> GetBooksByGenreId(int genreId);
+        IEnumerable<Cart> GetCarts();
+        Cart GetCart(int id);
+        IEnumerable<Cart> GetCartsByBookId(int bookId);
         void SaveChanges();
     }
 }

@@ -25,22 +25,42 @@ namespace PublicBookStore.API.Controllers
 
         public Book Get(int id)
         {
-            return _bookRepo.GetBook(id);
+            var book = _bookRepo.GetBook(id);
+
+            if (book == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            return book;
         }
 
-        public void Post([FromBody]string value)
+        public void Post(Book book)
         {
+            _bookRepo.AddOrUpdate(book);
+            _bookRepo.SaveChanges();
         }
 
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
+        // PUT api/book/5
+        public void Put(int id)
         {
+            //Find book
+            var book = _bookRepo.GetBook(id);
+
+            //Check book
+            if (book == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            //Update existing book
+            _bookRepo.AddOrUpdate(book);
+
+            //Save
+            _bookRepo.SaveChanges();
         }
 
-        // DELETE api/values/5
+        // DELETE api/book/5
         public void Delete(int id)
         {
-
+            _bookRepo.Delete(id);
+            _bookRepo.SaveChanges();
         }
     }
 }

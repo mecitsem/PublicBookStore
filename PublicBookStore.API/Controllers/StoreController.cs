@@ -12,39 +12,36 @@ namespace PublicBookStore.API.Controllers
     public class StoreController : ApiController
     {
         private StoreRepository _storeRepo;
-        private BookRepository _bookRepo;
 
         public StoreController()
         {
             _storeRepo = new StoreRepository();
-            _bookRepo = new BookRepository();
         }
 
-        // GET api/store
-        public IEnumerable<Book> Get()
-        {
-            return _bookRepo.GetBooks();
-        }
 
         // GET api/store/5
-        public Book Get(int id)
+        public Cart Get(int id)
         {
-            return _bookRepo.GetBook(id);
+            var cart =  _storeRepo.GetCart(id);
+
+            if (cart == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            return cart;
         }
 
-        // POST api/store
-        public void Post([FromBody]string value)
+        [HttpGet, ActionName("GetCarts")]
+        public IEnumerable<Cart> GetCarts(int bookId)
         {
+            return _storeRepo.GetCartsByBookId(bookId);
         }
 
-        // PUT api/store/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+
 
         // DELETE api/store/5
         public void Delete(int id)
         {
+            //_storeRepo.Delete(id);
         }
     }
 }

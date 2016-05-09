@@ -18,22 +18,6 @@ namespace PublicBookStore.API.Repositories
             this.context = new PublicBookStoreEntities();
         }
 
-        //Collecitons
-        public IEnumerable<Book> GetBooks()
-        {
-            return context.Books.ToList();
-        }
-
-        public Book GetBook(int id)
-        {
-            return context.Books.Find(id);
-        }
-
-        public IEnumerable<Book> GetBooksByGenreId(int genreId)
-        {
-            return context.Books.Where(b => b.Genre.GenreId.Equals(genreId)).ToList();
-        }
-
         private bool disposed = false;
         public virtual void Dispose(bool disposing)
         {
@@ -56,6 +40,21 @@ namespace PublicBookStore.API.Repositories
         public void SaveChanges()
         {
             context.SaveChanges();
+        }
+
+        public IEnumerable<Cart> GetCarts()
+        {
+            return context.Carts.ToList();
+        }
+
+        public Cart GetCart(int id)
+        {
+            return context.Carts.Find(id);
+        }
+
+        public IEnumerable<Cart> GetCartsByBookId(int bookId)
+        {
+            return context.Carts.Where(c => c.BookId.Equals(bookId)).ToList();
         }
     }
 }
