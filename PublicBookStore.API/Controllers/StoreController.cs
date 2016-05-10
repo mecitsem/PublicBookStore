@@ -20,9 +20,9 @@ namespace PublicBookStore.API.Controllers
 
 
         // GET api/store/5
-        public Cart Get(int id)
+        public IEnumerable<Cart> Get(string id)
         {
-            var cart =  _storeRepo.GetCart(id);
+            var cart =  _storeRepo.GetCarts(id);
 
             if (cart == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -30,11 +30,6 @@ namespace PublicBookStore.API.Controllers
             return cart;
         }
 
-        [HttpGet, ActionName("GetCarts")]
-        public IEnumerable<Cart> GetCarts(int bookId)
-        {
-            return _storeRepo.GetCartsByBookId(bookId);
-        }
 
 
 

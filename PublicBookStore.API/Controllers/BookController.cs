@@ -35,6 +35,9 @@ namespace PublicBookStore.API.Controllers
 
         public void Post(Book book)
         {
+            if (book == null)
+                throw new HttpResponseException(HttpStatusCode.NoContent);
+
             _bookRepo.AddOrUpdate(book);
             _bookRepo.SaveChanges();
         }

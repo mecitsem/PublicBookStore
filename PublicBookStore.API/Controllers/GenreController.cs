@@ -33,6 +33,9 @@ namespace PublicBookStore.API.Controllers
 
         public void Post(Genre genre)
         {
+            if (genre == null)
+                throw new HttpResponseException(HttpStatusCode.NoContent);
+
             _genreRepo.AddOrUpdate(genre);
             _genreRepo.SaveChanges();
         }

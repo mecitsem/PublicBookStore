@@ -47,14 +47,40 @@ namespace PublicBookStore.API.Repositories
             return context.Carts.ToList();
         }
 
-        public Cart GetCart(int id)
-        {
-            return context.Carts.Find(id);
-        }
-
         public IEnumerable<Cart> GetCartsByBookId(int bookId)
         {
             return context.Carts.Where(c => c.BookId.Equals(bookId)).ToList();
+        }
+
+        public void AddorUpdate(Cart cart)
+        {
+            if (context.Carts.Contains(cart))
+                context.Entry(cart).State = System.Data.Entity.EntityState.Modified;
+            else
+                context.Carts.Add(cart);
+        }
+
+        public void Delete(int id)
+        {
+            var cart = context.Carts.Find(id);
+            if (cart == null)
+                throw new ArgumentNullException();
+
+            context.Carts.Remove(cart);
+
+        }
+
+        public void AddOrUpdateOrderDetail(OrderDetail orderDetail)
+        {
+            if (context.OrderDetails.Contains(orderDetail))
+                context.Entry(orderDetail).State = System.Data.Entity.EntityState.Modified;
+            else
+                context.OrderDetails.Add(orderDetail);
+        }
+
+        public IEnumerable<Cart> GetCarts(string cartId)
+        {
+            return context.Carts.Where(c => c.CartId.Equals(cartId));
         }
     }
 }

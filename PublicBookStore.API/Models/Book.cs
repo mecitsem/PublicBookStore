@@ -18,7 +18,7 @@ namespace PublicBookStore.API.Models
         public string Description { get; set; }
         public string ImageUrl { get; set; }
         public DateTime Published { get; set; }
-
+        public decimal Price { get; set; }
 
 
         public virtual Genre Genre { get; set; }

@@ -128,17 +128,37 @@
 
 </div>
 @section Scripts {
-   
+
     <script type="text/javascript">
+
+        var apiUrl = "http://localhost:55565/api/genre";
         $(document).ready(function () {
             GetCategories();
         });
 
         function GetCategories() {
-            $.getJSON("http://localhost:55564/api/genre", null, function (d, t, x) {
-                var json = d;
-                console.log(json);
+
+            var settings = {
+                "async": true,
+                "contentType": "application/json",
+                "dataType": "json",
+                "crossDomain": true,
+                "url": "http://localhost:55565/api/genre",
+                "method": "GET",
+                "headers": {
+                    "cache-control": "no-cache",
+                    "Accept": "application/json",
+                    "Origin": "http://localhost:55565",
+                    "Referer": "http://localhost:55565",
+                    "Access-Control-Allow-Origin": "http://localhost:55565",
+                    "Access-Control-Allow-Credentials": true
+                }
+            }
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
             });
+
         }
     </script>
 

@@ -10,7 +10,7 @@ namespace PublicBookStore.API.Interfaces
     public interface IStoreRepository : IDisposable
     {
         IEnumerable<Cart> GetCarts();
-        Cart GetCart(int id);
+        IEnumerable<Cart> GetCarts(string cartId);
         IEnumerable<Cart> GetCartsByBookId(int bookId);
         void SaveChanges();
     }
