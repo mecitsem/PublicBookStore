@@ -1,4 +1,6 @@
-﻿using PublicBookStore.API.Models;
+﻿using AutoMapper;
+using PublicBookStore.API.DTOs;
+using PublicBookStore.API.Models;
 using PublicBookStore.API.Repositories;
 using System;
 using System.Collections.Generic;
@@ -12,31 +14,43 @@ namespace PublicBookStore.API.Controllers
     public class GenreController : ApiController
     {
         private GenreRepository _genreRepo;
+        private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Genre, GenreDTO>());
 
         public GenreController()
         {
             _genreRepo = new GenreRepository();
         }
 
-        public IEnumerable<Genre> Get()
+        public IEnumerable<GenreDTO> Get()
         {
-            return _genreRepo.GetGenres();
+            var genres = _genreRepo.GetGenres();
+            //Mapper
+            var mapper = config.CreateMapper();
+
+            return genres.AsEnumerable().Select(d => mapper.Map<Genre, GenreDTO>(d)).ToList();
         }
 
-        public Genre Get(int id)
+        public GenreDTO Get(int id)
         {
             var genre = _genreRepo.GetGenre(id);
+
             if (genre == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
-            return genre;
+
+            var mapper = config.CreateMapper();
+
+            return mapper.Map<Genre, GenreDTO>(genre);
         }
 
-        public void Post(Genre genre)
+        public void Post(GenreDTO genre)
         {
             if (genre == null)
                 throw new HttpResponseException(HttpStatusCode.NoContent);
 
-            _genreRepo.AddOrUpdate(genre);
+            var mapper = config.CreateMapper();
+            var g = mapper.Map<GenreDTO, Genre>(genre);
+
+            _genreRepo.AddOrUpdate(g);
             _genreRepo.SaveChanges();
         }
 
