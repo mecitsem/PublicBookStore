@@ -1,4 +1,6 @@
-﻿using PublicBookStore.API.Models;
+﻿using AutoMapper;
+using PublicBookStore.API.DTOs;
+using PublicBookStore.API.Models;
 using PublicBookStore.API.Repositories;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ namespace PublicBookStore.API.Controllers
     public class StoreController : ApiController
     {
         private StoreRepository _storeRepo;
+        private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Cart, CartDTO>());
 
         public StoreController()
         {
@@ -20,23 +23,38 @@ namespace PublicBookStore.API.Controllers
 
 
         // GET api/store/5
-        public IEnumerable<Cart> Get(string id)
+        public IEnumerable<CartDTO> Get(string id)
         {
-            var cart =  _storeRepo.GetCarts(id);
+            var carts = _storeRepo.GetCarts(id);
 
-            if (cart == null)
+            if (carts == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return cart;
+            //Mapper
+            var mapper = config.CreateMapper();
+
+            return carts.AsEnumerable().Select(c => mapper.Map<Cart, CartDTO>(c));
         }
 
+        public void Post(CartDTO cart)
+        {
+            if (cart == null)
+                throw new HttpResponseException(HttpStatusCode.NoContent);
 
+            var mapper = config.CreateMapper();
+
+            var c = mapper.Map<CartDTO, Cart>(cart);
+
+            _storeRepo.AddOrUpdate(c);
+            _storeRepo.SaveChanges();
+        }
 
 
         // DELETE api/store/5
         public void Delete(int id)
         {
-            //_storeRepo.Delete(id);
+            _storeRepo.Delete(id);
+            _storeRepo.SaveChanges();
         }
     }
 }
