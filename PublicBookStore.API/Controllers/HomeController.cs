@@ -10,7 +10,7 @@ namespace PublicBookStore.API.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            ViewBag.Title = "Public Book Store API";
 
             return View();
         }
