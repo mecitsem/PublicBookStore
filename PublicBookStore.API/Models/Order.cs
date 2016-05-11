@@ -7,7 +7,7 @@ namespace PublicBookStore.API.Models
 {
     public class Order
     {
-
+        [Key]
         public int OrderId { get; set; }
         public DateTime OrderDate { get; set; }
         public string Username { get; set; }
