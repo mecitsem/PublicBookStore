@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -198,8 +202,13 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Data\PublicBookStoreEntities.cs" />
+    <Compile Include="DTOs\AuthorDTO.cs" />
+    <Compile Include="DTOs\BookDTO.cs" />
+    <Compile Include="DTOs\CartDTO.cs" />
+    <Compile Include="DTOs\GenreDTO.cs" />
+    <Compile Include="DTOs\OrderDetailDTO.cs" />
+    <Compile Include="DTOs\OrderDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -209,9 +218,9 @@
     <Compile Include="Interfaces\IGenreRepository.cs" />
     <Compile Include="Interfaces\IOrderRepository.cs" />
     <Compile Include="Interfaces\IStoreRepository.cs" />
-    <Compile Include="Migrations\201605030717206_InitialCreate.cs" />
-    <Compile Include="Migrations\201605030717206_InitialCreate.Designer.cs">
-      <DependentUpon>201605030717206_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201605111403271_InitialCreate.cs" />
+    <Compile Include="Migrations\201605111403271_InitialCreate.Designer.cs">
+      <DependentUpon>201605111403271_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Author.cs" />
@@ -293,8 +302,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201605030717206_InitialCreate.resx">
-      <DependentUpon>201605030717206_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201605111403271_InitialCreate.resx">
+      <DependentUpon>201605111403271_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
@@ -315,7 +324,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>54698</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:54698/</IISUrl>
+          <IISUrl>http://localhost:54700/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

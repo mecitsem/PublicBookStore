@@ -27,6 +27,7 @@ namespace PublicBookStore.API.Migrations
                         Description = c.String(),
                         ImageUrl = c.String(),
                         Published = c.DateTime(nullable: false),
+                        Price = c.Decimal(nullable: false, precision: 18, scale: 2),
                     })
                 .PrimaryKey(t => t.BookId)
                 .ForeignKey("dbo.Author", t => t.AuthorId, cascadeDelete: true)
@@ -50,16 +51,15 @@ namespace PublicBookStore.API.Migrations
                     {
                         OrderDetailId = c.Int(nullable: false, identity: true),
                         OrderId = c.Int(nullable: false),
-                        AlbumId = c.Int(nullable: false),
+                        BookId = c.Int(nullable: false),
                         Quantity = c.Int(nullable: false),
                         UnitPrice = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        Book_BookId = c.Int(),
                     })
                 .PrimaryKey(t => t.OrderDetailId)
-                .ForeignKey("dbo.Book", t => t.Book_BookId)
+                .ForeignKey("dbo.Book", t => t.BookId, cascadeDelete: true)
                 .ForeignKey("dbo.Order", t => t.OrderId, cascadeDelete: true)
                 .Index(t => t.OrderId)
-                .Index(t => t.Book_BookId);
+                .Index(t => t.BookId);
             
             CreateTable(
                 "dbo.Order",
@@ -85,12 +85,13 @@ namespace PublicBookStore.API.Migrations
                 "dbo.Cart",
                 c => new
                     {
-                        CartId = c.Int(nullable: false, identity: true),
+                        RecordId = c.Int(nullable: false, identity: true),
+                        CartId = c.String(),
                         BookId = c.Int(nullable: false),
                         Count = c.Int(nullable: false),
                         DateCreated = c.DateTime(nullable: false),
                     })
-                .PrimaryKey(t => t.CartId)
+                .PrimaryKey(t => t.RecordId)
                 .ForeignKey("dbo.Book", t => t.BookId, cascadeDelete: true)
                 .Index(t => t.BookId);
             
@@ -100,11 +101,11 @@ namespace PublicBookStore.API.Migrations
         {
             DropForeignKey("dbo.Cart", "BookId", "dbo.Book");
             DropForeignKey("dbo.OrderDetail", "OrderId", "dbo.Order");
-            DropForeignKey("dbo.OrderDetail", "Book_BookId", "dbo.Book");
+            DropForeignKey("dbo.OrderDetail", "BookId", "dbo.Book");
             DropForeignKey("dbo.Book", "GenreId", "dbo.Genre");
             DropForeignKey("dbo.Book", "AuthorId", "dbo.Author");
             DropIndex("dbo.Cart", new[] { "BookId" });
-            DropIndex("dbo.OrderDetail", new[] { "Book_BookId" });
+            DropIndex("dbo.OrderDetail", new[] { "BookId" });
             DropIndex("dbo.OrderDetail", new[] { "OrderId" });
             DropIndex("dbo.Book", new[] { "AuthorId" });
             DropIndex("dbo.Book", new[] { "GenreId" });

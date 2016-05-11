@@ -52,7 +52,7 @@ namespace PublicBookStore.API.Repositories
             return context.Carts.Where(c => c.BookId.Equals(bookId)).ToList();
         }
 
-        public void AddorUpdate(Cart cart)
+        public void AddOrUpdate(Cart cart)
         {
             if (context.Carts.Contains(cart))
                 context.Entry(cart).State = System.Data.Entity.EntityState.Modified;
