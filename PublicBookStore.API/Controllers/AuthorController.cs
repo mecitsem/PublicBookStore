@@ -1,4 +1,6 @@
-﻿using PublicBookStore.API.Models;
+﻿using AutoMapper;
+using PublicBookStore.API.DTOs;
+using PublicBookStore.API.Models;
 using PublicBookStore.API.Repositories;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ namespace PublicBookStore.API.Controllers
     public class AuthorController : ApiController
     {
         private AuthorRepository _authorRepo;
+        private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Book, BookDTO>());
 
         public AuthorController()
         {
