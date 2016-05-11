@@ -47,9 +47,10 @@ namespace PublicBookStore.API.Controllers
             if (book == null)
                 throw new HttpResponseException(HttpStatusCode.NoContent);
 
-            var 
+            var mapper = config.CreateMapper();
+            var b = mapper.Map<BookDTO, Book>(book);
 
-            _bookRepo.AddOrUpdate(book);
+            _bookRepo.AddOrUpdate(b);
             _bookRepo.SaveChanges();
         }
 
