@@ -21,24 +21,33 @@ namespace PublicBookStore.API.Controllers
             _authorRepo = new AuthorRepository();
         }
 
-        public IEnumerable<Author> Get()
+        public IEnumerable<AuthorDTO> Get()
         {
-            return _authorRepo.GetAuthors();
+            var authors = _authorRepo.GetAuthors();
+            var mapper = config.CreateMapper();
+            return authors.AsEnumerable().Select(a => mapper.Map<Author, AuthorDTO>(a));
         }
 
-        public Author Get(int id)
+        public AuthorDTO Get(int id)
         {
             var author = _authorRepo.GetAuthor(id);
 
             if (author == null)
                 throw new HttpResponseException(HttpStatusCode.NoContent);
+            var mapper = config.CreateMapper();
 
-            return author;
+            return mapper.Map<Author, AuthorDTO>(author);
         }
 
-        public void Post(Author author)
+        public void Post(AuthorDTO author)
         {
-            _authorRepo.AddOrUpdate(author);
+            if (author == null)
+                throw new HttpResponseException(HttpStatusCode.NoContent);
+
+            var mapper = config.CreateMapper();
+            var a = mapper.Map<AuthorDTO, Author>(author);
+
+            _authorRepo.AddOrUpdate(a);
             _authorRepo.SaveChanges();
         }
 
@@ -58,6 +67,6 @@ namespace PublicBookStore.API.Controllers
             _authorRepo.Delete(id);
             _authorRepo.SaveChanges();
         }
-        
+
     }
 }
