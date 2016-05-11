@@ -16,6 +16,7 @@ namespace PublicBookStore.API.Controllers
     {
         private IOrderRepository _orderRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDTO>());
+        private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<OrderDTO, Order>());
 
         public OrderController()
         {

@@ -15,6 +15,7 @@ namespace PublicBookStore.API.Controllers
     {
         private StoreRepository _storeRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Cart, CartDTO>());
+        private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<CartDTO, Cart>());
 
         public StoreController()
         {
@@ -41,7 +42,7 @@ namespace PublicBookStore.API.Controllers
             if (cart == null)
                 throw new HttpResponseException(HttpStatusCode.NoContent);
 
-            var mapper = config.CreateMapper();
+            var mapper = configToEntity.CreateMapper();
 
             var c = mapper.Map<CartDTO, Cart>(cart);
 

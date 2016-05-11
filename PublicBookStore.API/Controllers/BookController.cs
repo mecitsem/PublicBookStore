@@ -15,6 +15,8 @@ namespace PublicBookStore.API.Controllers
     {
         private BookRepository _bookRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Book, BookDTO>());
+        private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<BookDTO, Book>());
+
         public BookController()
         {
             _bookRepo = new BookRepository();
@@ -47,7 +49,7 @@ namespace PublicBookStore.API.Controllers
             if (book == null)
                 throw new HttpResponseException(HttpStatusCode.NoContent);
 
-            var mapper = config.CreateMapper();
+            var mapper = configToEntity.CreateMapper();
             var b = mapper.Map<BookDTO, Book>(book);
 
             _bookRepo.AddOrUpdate(b);

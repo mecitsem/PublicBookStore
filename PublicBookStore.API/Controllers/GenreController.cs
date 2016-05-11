@@ -15,7 +15,7 @@ namespace PublicBookStore.API.Controllers
     {
         private GenreRepository _genreRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Genre, GenreDTO>());
-
+        private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<GenreDTO, Genre>());
         public GenreController()
         {
             _genreRepo = new GenreRepository();
@@ -47,7 +47,7 @@ namespace PublicBookStore.API.Controllers
             if (genre == null)
                 throw new HttpResponseException(HttpStatusCode.NoContent);
 
-            var mapper = config.CreateMapper();
+            var mapper = configToEntity.CreateMapper();
             var g = mapper.Map<GenreDTO, Genre>(genre);
 
             _genreRepo.AddOrUpdate(g);
