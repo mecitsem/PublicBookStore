@@ -1,4 +1,6 @@
-﻿using PublicBookStore.API.Models;
+﻿using AutoMapper;
+using PublicBookStore.API.DTOs;
+using PublicBookStore.API.Models;
 using PublicBookStore.API.Repositories;
 using System;
 using System.Collections.Generic;
@@ -12,31 +14,40 @@ namespace PublicBookStore.API.Controllers
     public class BookController : ApiController
     {
         private BookRepository _bookRepo;
-
+        private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Book, BookDTO>());
         public BookController()
         {
             _bookRepo = new BookRepository();
         }
 
-        public IEnumerable<Book> Get()
+        public IEnumerable<BookDTO> Get()
         {
-            return _bookRepo.GetBooks();
+            var books = _bookRepo.GetBooks();
+            //Mapper
+            var mapper = config.CreateMapper();
+
+            return books.AsEnumerable().Select(dto => mapper.Map<Book, BookDTO>(dto));
         }
 
-        public Book Get(int id)
+        public BookDTO Get(int id)
         {
             var book = _bookRepo.GetBook(id);
 
             if (book == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return book;
+            //Mapper
+            var mapper = config.CreateMapper();
+
+            return mapper.Map<Book, BookDTO>(book);
         }
 
-        public void Post(Book book)
+        public void Post(BookDTO book)
         {
             if (book == null)
                 throw new HttpResponseException(HttpStatusCode.NoContent);
+
+            var 
 
             _bookRepo.AddOrUpdate(book);
             _bookRepo.SaveChanges();
