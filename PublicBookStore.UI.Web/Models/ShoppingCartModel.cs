@@ -47,7 +47,7 @@ namespace PublicBookStore.UI.Web.Models
                     DateCreated = DateTime.Now
                 };
 
-                store.AddorUpdate(cartItem);
+                store.AddOrUpdate(cartItem);
 
                 //storeDB.Carts.Add(cartItem);
             }
