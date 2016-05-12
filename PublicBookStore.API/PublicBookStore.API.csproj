@@ -217,9 +217,9 @@
     <Compile Include="Interfaces\IGenreRepository.cs" />
     <Compile Include="Interfaces\IOrderRepository.cs" />
     <Compile Include="Interfaces\IStoreRepository.cs" />
-    <Compile Include="Migrations\201605111403271_InitialCreate.cs" />
-    <Compile Include="Migrations\201605111403271_InitialCreate.Designer.cs">
-      <DependentUpon>201605111403271_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201605121405012_InitialCreate.cs" />
+    <Compile Include="Migrations\201605121405012_InitialCreate.Designer.cs">
+      <DependentUpon>201605121405012_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Author.cs" />
@@ -305,8 +305,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201605111403271_InitialCreate.resx">
-      <DependentUpon>201605111403271_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201605121405012_InitialCreate.resx">
+      <DependentUpon>201605121405012_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

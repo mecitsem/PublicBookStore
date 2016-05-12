@@ -13,7 +13,7 @@ namespace PublicBookStore.API.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201605111403271_InitialCreate"; }
+            get { return "201605121405012_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

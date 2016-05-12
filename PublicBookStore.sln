@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{7C7484A0-A8BF-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{8A514ACC-46F9-4C37-B4E5-445958CBC4C7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{637EA825-2CF9-4660-A32B-E9A3168A8785}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublicBookStore.UI.Web", "PublicBookStore.UI.Web\PublicBookStore.UI.Web.csproj", "{62983E4F-4268-4CF4-996A-6C59AA3F4DE3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublicBookStore.API", "PublicBookStore.API\PublicBookStore.API.csproj", "{B78AB23A-085D-4636-98DD-4650EB91644D}"

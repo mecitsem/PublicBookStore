@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<PublicBookStore.UI.Web.Models.BookModel>
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -8,16 +9,18 @@
 
     <div class="col-md-3">
         <p class="lead">Shop Name</p>
-        <div class="list-group">
-            <a href="#" class="list-group-item">Category 1</a>
-            <a href="#" class="list-group-item">Category 2</a>
-            <a href="#" class="list-group-item">Category 3</a>
+        <div class="list-group" data-bind="template:{foreach:genres}">
+
+            <a href="#" class="list-group-item" data-bind="text: GenreId"><span data-bind="text: Name"></span></a>
+
         </div>
     </div>
 
     <div class="col-md-9">
 
         <div class="row">
+
+
 
             <div class="col-sm-4 col-lg-4 col-md-4 book">
                 <div class="thumbnail">
@@ -131,35 +134,25 @@
 
     <script type="text/javascript">
 
-        var apiUrl = "http://localhost:55565/api/genre";
+        var apiUrl = "http://www.publicbookstore.com";
         $(document).ready(function () {
-            GetCategories();
+
+            function dealModel() {
+                var self = this;
+                self.genres = ko.observableArray([]);
+
+                $.getJSON(apiUrl + "/api/genre")
+                    .done(function (response) {
+                        self.genres(response);
+                    });
+
+
+            }
+            ko.applyBindings(new dealModel());
         });
 
-        function GetCategories() {
 
-            var settings = {
-                "async": true,
-                "contentType": "application/json",
-                "dataType": "json",
-                "crossDomain": true,
-                "url": "http://localhost:55565/api/genre",
-                "method": "GET",
-                "headers": {
-                    "cache-control": "no-cache",
-                    "Accept": "application/json",
-                    "Origin": "http://localhost:55565",
-                    "Referer": "http://localhost:55565",
-                    "Access-Control-Allow-Origin": "http://localhost:55565",
-                    "Access-Control-Allow-Credentials": true
-                }
-            }
-
-            $.ajax(settings).done(function (response) {
-                console.log(response);
-            });
-
-        }
+       
     </script>
 
 }
