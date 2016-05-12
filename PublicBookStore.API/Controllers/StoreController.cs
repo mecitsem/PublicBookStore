@@ -37,25 +37,54 @@ namespace PublicBookStore.API.Controllers
             return carts.AsEnumerable().Select(c => mapper.Map<Cart, CartDTO>(c));
         }
 
-        public void Post(CartDTO cart)
+        public HttpResponseMessage Post(CartDTO cart)
         {
-            if (cart == null)
-                throw new HttpResponseException(HttpStatusCode.NoContent);
+            HttpResponseMessage result = null;
+            try
+            {
+                if (cart == null)
+                    throw new HttpResponseException(HttpStatusCode.NoContent);
 
-            var mapper = configToEntity.CreateMapper();
+                var mapper = configToEntity.CreateMapper();
 
-            var c = mapper.Map<CartDTO, Cart>(cart);
+                var c = mapper.Map<CartDTO, Cart>(cart);
 
-            _storeRepo.AddOrUpdate(c);
-            _storeRepo.SaveChanges();
+                var updatedItem = _storeRepo.AddOrUpdate(c);
+
+                _storeRepo.SaveChanges();
+
+                result = Request.CreateResponse(HttpStatusCode.Created, config.CreateMapper().Map<Cart, CartDTO>(updatedItem));
+
+            }
+            catch (Exception ex)
+            {
+                result = Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, ex);
+            }
+            return result;
         }
 
 
         // DELETE api/store/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
-            _storeRepo.Delete(id);
-            _storeRepo.SaveChanges();
+            HttpResponseMessage result = null;
+            try
+            {
+                _storeRepo.Delete(id);
+                _storeRepo.SaveChanges();
+                result = Request.CreateResponse(HttpStatusCode.Accepted);
+            }
+            catch (Exception ex)
+            {
+                result = Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, ex);
+            }
+            return result;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _storeRepo.Dispose(disposing);
+            base.Dispose(disposing);
         }
     }
 }

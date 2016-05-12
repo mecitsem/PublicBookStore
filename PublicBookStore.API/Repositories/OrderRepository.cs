@@ -19,12 +19,31 @@ namespace PublicBookStore.API.Repositories
             this.context = new PublicBookStoreEntities();
         }
 
-        public void AddOrUpdate(Order order)
+        public Order AddOrUpdate(Order order)
         {
-            if (context.Orders.Contains(order))
+            Order result = null;
+            if (context.Orders.Any(o => o.OrderId.Equals(order.OrderId)))
+            {
+                var exOrder = context.Orders.Find(order.OrderId);
+                exOrder.Address = order.Address;
+                exOrder.City = order.City;
+                exOrder.Country = order.Country;
+                exOrder.Email = order.Email;
+                exOrder.FirstName = order.FirstName;
+                exOrder.LastName = order.LastName;
+                exOrder.OrderDate = order.OrderDate;
+                exOrder.Phone = order.Phone;
+                exOrder.PostalCode = order.PostalCode;
+                exOrder.State = order.State;
+                exOrder.Total = order.Total;
+                exOrder.Username = order.Username;
                 context.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                result = exOrder;
+            }
             else
-                context.Orders.Add(order);
+                result = context.Orders.Add(order);
+
+            return result;
         }
 
         public void Delete(int id)

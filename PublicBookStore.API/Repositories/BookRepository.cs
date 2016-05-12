@@ -18,8 +18,9 @@ namespace PublicBookStore.API.Repositories
             this.context = new PublicBookStoreEntities();
         }
 
-        public void AddOrUpdate(Book book)
+        public Book AddOrUpdate(Book book)
         {
+            Book result;
             if (context.Books.Any(b => b.BookId.Equals(book.BookId)))
             {
                 var exBook = context.Books.Find(book.BookId);
@@ -33,9 +34,12 @@ namespace PublicBookStore.API.Repositories
                 exBook.Title = book.Title;
                 exBook.Published = book.Published;
                 context.Entry(book).State = System.Data.Entity.EntityState.Modified;
+                result = exBook;
             }
             else
-                context.Books.Add(book);
+                result = context.Books.Add(book);
+
+            return result;
         }
 
         public IEnumerable<Author> Authors()

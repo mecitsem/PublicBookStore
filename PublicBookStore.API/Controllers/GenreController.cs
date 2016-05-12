@@ -16,6 +16,7 @@ namespace PublicBookStore.API.Controllers
         private GenreRepository _genreRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Genre, GenreDTO>());
         private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<GenreDTO, Genre>());
+
         public GenreController()
         {
             _genreRepo = new GenreRepository();
@@ -35,38 +36,55 @@ namespace PublicBookStore.API.Controllers
             var genre = _genreRepo.GetGenre(id);
 
             if (genre == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             var mapper = config.CreateMapper();
 
             return mapper.Map<Genre, GenreDTO>(genre);
         }
 
-        public void Post(GenreDTO genre)
+        public HttpResponseMessage Post(GenreDTO genre)
         {
+            HttpResponseMessage result = null;
             if (genre == null)
-                throw new HttpResponseException(HttpStatusCode.NoContent);
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            try
+            {
+                var mapper = configToEntity.CreateMapper();
+                var g = mapper.Map<GenreDTO, Genre>(genre);
 
-            var mapper = configToEntity.CreateMapper();
-            var g = mapper.Map<GenreDTO, Genre>(genre);
+                var updatedItem = _genreRepo.AddOrUpdate(g);
+                _genreRepo.SaveChanges();
+                result = Request.CreateResponse(HttpStatusCode.Created, config.CreateMapper().Map<Genre, GenreDTO>(updatedItem));
+            }
+            catch (Exception ex)
+            {
+                result = Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, ex);
+            }
+            return result;
 
-            _genreRepo.AddOrUpdate(g);
-            _genreRepo.SaveChanges();
         }
 
-        public void Put(int id)
+        public HttpResponseMessage Delete(int id)
         {
-            var genre = _genreRepo.GetGenre(id);
-            if (genre == null)
-                throw new HttpResponseException(HttpStatusCode.NoContent);
-            _genreRepo.AddOrUpdate(genre);
-            _genreRepo.SaveChanges();
+            HttpResponseMessage result = null;
+            try
+            {
+                _genreRepo.Delete(id);
+                _genreRepo.SaveChanges();
+                result = Request.CreateResponse(HttpStatusCode.Accepted);
+            }
+            catch (Exception ex)
+            {
+                result = Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, ex);
+            }
+            return result;
         }
 
-        public void Delete(int id)
+        protected override void Dispose(bool disposing)
         {
-            _genreRepo.Delete(id);
-            _genreRepo.SaveChanges();
+            _genreRepo.Dispose(disposing);
+            base.Dispose(disposing);
         }
 
     }

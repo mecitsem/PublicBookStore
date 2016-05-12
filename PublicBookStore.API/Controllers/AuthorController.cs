@@ -40,33 +40,50 @@ namespace PublicBookStore.API.Controllers
             return mapper.Map<Author, AuthorDTO>(author);
         }
 
-        public void Post(AuthorDTO author)
+        public HttpResponseMessage Post(AuthorDTO author)
         {
-            if (author == null)
-                throw new HttpResponseException(HttpStatusCode.NoContent);
+            HttpResponseMessage result = null;
+            try
+            {
+                if (author == null)
+                    throw new HttpResponseException(HttpStatusCode.NoContent);
 
-            var mapper = configToEntity.CreateMapper();
-            var a = mapper.Map<AuthorDTO, Author>(author);
+                var mapper = configToEntity.CreateMapper();
+                var a = mapper.Map<AuthorDTO, Author>(author);
 
-            _authorRepo.AddOrUpdate(a);
-            _authorRepo.SaveChanges();
+                var updatedItem = _authorRepo.AddOrUpdate(a);
+                _authorRepo.SaveChanges();
+                result = Request.CreateResponse(HttpStatusCode.Created, config.CreateMapper().Map<Author, AuthorDTO>(updatedItem));
+            }
+            catch (Exception ex)
+            {
+                result = Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, ex);
+            }
+
+            return result;
         }
 
-        public void Put(int id)
-        {
-            var author = _authorRepo.GetAuthor(id);
-            if (author == null)
-                throw new HttpResponseException(HttpStatusCode.NoContent);
 
-            _authorRepo.AddOrUpdate(author);
-            _authorRepo.SaveChanges();
+        public HttpResponseMessage Delete(int id)
+        {
+            HttpResponseMessage result = null;
+            try
+            {
+                _authorRepo.Delete(id);
+                _authorRepo.SaveChanges();
+                result = Request.CreateResponse(HttpStatusCode.Accepted);
+            }
+            catch (Exception ex)
+            {
+                result = Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, ex);
+            }
+            return result;
         }
 
-
-        public void Delete(int id)
+        protected override void Dispose(bool disposing)
         {
-            _authorRepo.Delete(id);
-            _authorRepo.SaveChanges();
+            _authorRepo.Dispose(disposing);
+            base.Dispose(disposing);
         }
 
     }

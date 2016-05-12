@@ -15,7 +15,7 @@ namespace PublicBookStore.API.Interfaces
         Book GetBook(int id);
         IEnumerable<Genre> Genres();
         IEnumerable<Author> Authors();
-        void AddOrUpdate(Book book);
+        Book AddOrUpdate(Book book);
         void Delete(int id);
         void SaveChanges();
     }

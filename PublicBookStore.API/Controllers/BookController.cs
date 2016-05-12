@@ -44,40 +44,52 @@ namespace PublicBookStore.API.Controllers
             return mapper.Map<Book, BookDTO>(book);
         }
 
-        public void Post(BookDTO book)
+        public HttpResponseMessage Post(BookDTO book)
         {
-            if (book == null)
-                throw new HttpResponseException(HttpStatusCode.NoContent);
+            HttpResponseMessage result = null;
+            try
+            {
+                if (book == null)
+                    throw new HttpResponseException(HttpStatusCode.NoContent);
 
-            var mapper = configToEntity.CreateMapper();
-            var b = mapper.Map<BookDTO, Book>(book);
+                var mapper = configToEntity.CreateMapper();
+                var b = mapper.Map<BookDTO, Book>(book);
 
-            _bookRepo.AddOrUpdate(b);
-            _bookRepo.SaveChanges();
+                var updatedItem = _bookRepo.AddOrUpdate(b);
+                _bookRepo.SaveChanges();
+                result = Request.CreateResponse(HttpStatusCode.Created, config.CreateMapper().Map<Book, BookDTO>(updatedItem));
+            }
+            catch (Exception ex)
+            {
+                result = Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, ex);
+            }
+            return result;
         }
 
-        // PUT api/book/5
-        public void Put(int id)
-        {
-            //Find book
-            var book = _bookRepo.GetBook(id);
 
-            //Check book
-            if (book == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            //Update existing book
-            _bookRepo.AddOrUpdate(book);
-
-            //Save
-            _bookRepo.SaveChanges();
-        }
 
         // DELETE api/book/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
-            _bookRepo.Delete(id);
-            _bookRepo.SaveChanges();
+            HttpResponseMessage result = null;
+            try
+            {
+                _bookRepo.Delete(id);
+                _bookRepo.SaveChanges();
+                result = Request.CreateResponse(HttpStatusCode.Accepted);
+            }
+            catch (Exception ex)
+            {
+
+                result = Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, ex);
+            }
+            return result;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _bookRepo.Dispose(disposing);
+            base.Dispose(disposing);
         }
     }
 }

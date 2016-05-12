@@ -8,10 +8,10 @@ namespace PublicBookStore.API.Controllers
 {
     public class HomeController : Controller
     {
+        // GET: Home
         public ActionResult Index()
         {
             ViewBag.Title = "Public Book Store API";
-
             return View();
         }
     }

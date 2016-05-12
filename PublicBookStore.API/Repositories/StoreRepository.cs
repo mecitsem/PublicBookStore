@@ -52,12 +52,23 @@ namespace PublicBookStore.API.Repositories
             return context.Carts.Where(c => c.BookId.Equals(bookId)).ToList();
         }
 
-        public void AddOrUpdate(Cart cart)
+        public Cart AddOrUpdate(Cart cart)
         {
-            if (context.Carts.Contains(cart))
+            Cart result = null;
+            if (context.Carts.Any(c => c.RecordId.Equals(cart.RecordId)))
+            {
+                var exCart = context.Carts.Find(cart.RecordId);
+                exCart.CartId = cart.CartId;
+                exCart.Count = cart.Count;
+                exCart.DateCreated = cart.DateCreated;
+                exCart.BookId = cart.BookId;
                 context.Entry(cart).State = System.Data.Entity.EntityState.Modified;
+                result = exCart;
+            }
             else
-                context.Carts.Add(cart);
+              result=  context.Carts.Add(cart);
+
+            return result;
         }
 
         public void Delete(int id)

@@ -12,7 +12,7 @@ namespace PublicBookStore.API.Interfaces
         IEnumerable<Order> GetOrders();
         IEnumerable<Order> GetOrders(string username);
         Order GetOrder(int id);
-        void AddOrUpdate(Order order);
+        Order AddOrUpdate(Order order);
         void Delete(int id);
         void SaveChanges();
     }

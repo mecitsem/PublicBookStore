@@ -18,12 +18,20 @@ namespace PublicBookStore.API.Repositories
             this.context = new PublicBookStoreEntities();
         }
 
-        public void AddOrUpdate(Author author)
+        public Author AddOrUpdate(Author author)
         {
-            if (context.Authors.Contains(author))
+            Author result = null;
+            if (context.Authors.Any(a => a.AuthorId.Equals(author.AuthorId)))
+            {
+                var exAuthor = context.Authors.Find(author.AuthorId);
+                exAuthor.Name = author.Name;
                 context.Entry(author).State = System.Data.Entity.EntityState.Modified;
+                result = exAuthor;
+            }
             else
-                context.Authors.Add(author);
+                result = context.Authors.Add(author);
+
+            return result;
         }
 
         public void Delete(int id)

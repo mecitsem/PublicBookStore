@@ -14,7 +14,7 @@ namespace PublicBookStore.API.Controllers
 {
     public class OrderController : ApiController
     {
-        private IOrderRepository _orderRepo;
+        private OrderRepository _orderRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDTO>());
         private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<OrderDTO, Order>());
 
@@ -33,6 +33,12 @@ namespace PublicBookStore.API.Controllers
             var orders = _orderRepo.GetOrders(id);
             var mapper = config.CreateMapper();
             return orders.AsEnumerable().Select(a => mapper.Map<Order, OrderDTO>(a));
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _orderRepo.Dispose(disposing);
+            base.Dispose(disposing);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace PublicBookStore.API.Interfaces
     {
         IEnumerable<Author> GetAuthors();
         Author GetAuthor(int id);
-        void AddOrUpdate(Author author);
+        Author AddOrUpdate(Author author);
         void Delete(int id);
         void SaveChanges();
     }

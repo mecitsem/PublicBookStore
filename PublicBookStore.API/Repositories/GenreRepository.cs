@@ -18,17 +18,22 @@ namespace PublicBookStore.API.Repositories
             this.context = new PublicBookStoreEntities();
         }
 
-        public void AddOrUpdate(Genre genre)
+        public Genre AddOrUpdate(Genre genre)
         {
+            Genre result = null;
             if (context.Genres.Any(g => g.GenreId.Equals(genre.GenreId)))
             {
                 var exGenre = context.Genres.Find(genre.GenreId);
                 exGenre.Description = genre.Description;
                 exGenre.Name = genre.Name;
                 context.Entry(exGenre).State = System.Data.Entity.EntityState.Modified;
+                result = exGenre;
             }
             else
-                context.Genres.Add(genre);
+                result = context.Genres.Add(genre);
+
+            return result;
+            
         }
 
         public void Delete(int id)
