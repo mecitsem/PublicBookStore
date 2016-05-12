@@ -161,7 +161,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Initializer\" />
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +236,10 @@
     <Compile Include="Repositories\StoreRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\aspnet-PublicBookStore-201605111403271.mdf" />
+    <Content Include="App_Data\aspnet-PublicBookStore-201605111403271_log.ldf">
+      <DependentUpon>aspnet-PublicBookStore-201605111403271.mdf</DependentUpon>
+    </Content>
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\BookImages\endofwatch.jpg" />
     <Content Include="Content\bootstrap.css" />
