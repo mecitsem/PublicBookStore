@@ -249,7 +249,9 @@
       <DependentUpon>aspnet-PublicBookStore-201605111403271.mdf</DependentUpon>
     </Content>
     <Content Include="Areas\HelpPage\HelpPage.css" />
-    <Content Include="Content\BookImages\endofwatch.jpg" />
+    <Content Include="Content\Books\apollo.jpg" />
+    <Content Include="Content\Books\endofwatch.jpg" />
+    <Content Include="Content\Books\mebeforeyou.jpg" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
