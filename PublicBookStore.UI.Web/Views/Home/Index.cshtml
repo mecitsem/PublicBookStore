@@ -7,30 +7,30 @@
 
 <div class="row">
 
-    <div class="col-md-3">
-        <p class="lead">Shop Name</p>
-        <div class="list-group" data-bind="template:{foreach:genres}">
+    <div  class="col-md-3">
+        <p class="lead">Genres</p>
+        <div id="genresDiv" class="list-group" data-bind="template:{foreach:genres}">
 
-            <a href="#" class="list-group-item" data-bind="text: GenreId"><span data-bind="text: Name"></span></a>
+            <a href="#" class="list-group-item" data-bind="text: Name" ></a>
 
         </div>
     </div>
 
     <div class="col-md-9">
 
-        <div class="row">
+        <div id="booksDiv" class="row" data-bind="template:{foreach:books}">
 
 
 
             <div class="col-sm-4 col-lg-4 col-md-4 book">
                 <div class="thumbnail">
-                    <img src="http://placehold.it/320x150" alt="">
+                    <img data-bind="attr:{src:'http://www.publicbookstore.com/' + ImageUrl}" alt="">
                     <div class="caption">
-                        <h4 class="pull-right">$24.99</h4>
+                        <h4 class="pull-right" data-bind="text: '$'+ Price"></h4>
                         <h4>
-                            <a href="#">First Product</a>
+                            <a href="#" data-bind="text: Title"></a>
                         </h4>
-                        <p>See more snippets like this online store item at <a target="_blank" href="http://www.bootsnipp.com">Bootsnipp - http://bootsnipp.com</a>.</p>
+                        <p data-bind="text: Description"></p>
                     </div>
                     <div class="ratings">
                         <p class="pull-right">12 reviews</p>
@@ -41,89 +41,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-4 col-lg-4 col-md-4 book">
-                <div class="thumbnail">
-                    <img src="http://placehold.it/320x150" alt="">
-                    <div class="caption">
-                        <h4 class="pull-right">$64.99</h4>
-                        <h4>
-                            <a href="#">Second Product</a>
-                        </h4>
-                        <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                    <div class="ratings">
-                        <p class="pull-right">12 reviews</p>
-                        <p>
-                            <a href="javascript:;" class="btn btn-success btn-sm add-cart">Add to Cart</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4 col-lg-4 col-md-4 book">
-                <div class="thumbnail">
-                    <img src="http://placehold.it/320x150" alt="">
-                    <div class="caption">
-                        <h4 class="pull-right">$74.99</h4>
-                        <h4>
-                            <a href="#">Third Product</a>
-                        </h4>
-                        <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                    <div class="ratings">
-                        <p class="pull-right">31 reviews</p>
-                        <p>
-                            <a href="javascript:;" class="btn btn-success btn-sm add-cart">Add to Cart</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4 col-lg-4 col-md-4 book">
-                <div class="thumbnail">
-                    <img src="http://placehold.it/320x150" alt="">
-                    <div class="caption">
-                        <h4 class="pull-right">$84.99</h4>
-                        <h4>
-                            <a href="#">Fourth Product</a>
-                        </h4>
-                        <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                    <div class="ratings">
-                        <p class="pull-right">6 reviews</p>
-                        <p>
-                            <a href="javascript:;" class="btn btn-success btn-sm add-cart">Add to Cart</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4 col-lg-4 col-md-4 book">
-                <div class="thumbnail">
-                    <img src="http://placehold.it/320x150" alt="">
-                    <div class="caption">
-                        <h4 class="pull-right">$94.99</h4>
-                        <h4>
-                            <a href="#">Fifth Product</a>
-                        </h4>
-                        <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                    <div class="ratings">
-                        <p class="pull-right">18 reviews</p>
-                        <p>
-                            <a href="javascript:;" class="btn btn-success btn-sm add-cart">Add to Cart</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4 col-lg-4 col-md-4 book">
-                <h4>
-                    <a href="#">Like this template?</a>
-                </h4>
-                <p>If you like this template, then check out <a target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">this tutorial</a> on how to build a working review system for your online store!</p>
-                <a class="btn btn-primary" target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">View Tutorial</a>
-            </div>
+            
 
         </div>
 
@@ -137,22 +55,38 @@
         var apiUrl = "http://www.publicbookstore.com";
         $(document).ready(function () {
 
-            function dealModel() {
-                var self = this;
-                self.genres = ko.observableArray([]);
+           
 
-                $.getJSON(apiUrl + "/api/genre")
-                    .done(function (response) {
-                        self.genres(response);
-                    });
+            //Bind
+            ko.applyBindings(new bookModel(), document.getElementById("booksDiv"));
+            ko.applyBindings(new genreModel(), document.getElementById("genresDiv"));
 
-
-            }
-            ko.applyBindings(new dealModel());
+          
+         
         });
 
+        //Books
+        function bookModel() {
+            var self = this;
+            self.books = ko.observableArray([]);
 
-       
+            $.getJSON(apiUrl + "/api/book")
+                .done(function (response) {
+                    self.books(response);
+                });
+        }
+
+        //Genres
+        function genreModel() {
+            var self = this;
+            self.genres = ko.observableArray([]);
+
+            $.getJSON(apiUrl + "/api/genre")
+                .done(function (response) {
+                    self.genres(response);
+                });
+        }
+
     </script>
 
 }
