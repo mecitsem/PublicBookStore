@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace PublicBookStore.API
 {
@@ -10,6 +11,8 @@ namespace PublicBookStore.API
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
+            var cors = new EnableCorsAttribute("www.publicbookstore.com", "*", "*");
+            config.EnableCors();
 
             // Web API routes
             config.MapHttpAttributeRoutes();

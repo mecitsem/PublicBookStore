@@ -8,9 +8,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace PublicBookStore.API.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class BookController : ApiController
     {
         private BookRepository _bookRepo;
@@ -88,7 +90,7 @@ namespace PublicBookStore.API.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            _bookRepo.Dispose(disposing);
+            _bookRepo.Dispose();
             base.Dispose(disposing);
         }
     }
