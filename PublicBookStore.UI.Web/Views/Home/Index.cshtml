@@ -7,11 +7,18 @@
 
 <div class="row">
 
-    <div  class="col-md-3">
+    <div class="col-md-3">
         <p class="lead">Genres</p>
         <div id="genresDiv" class="list-group" data-bind="template:{foreach:genres}">
 
-            <a href="#" class="list-group-item" data-bind="text: Name" ></a>
+            <a href="#" class="list-group-item genre" data-bind="text: Name"></a>
+
+        </div>
+
+        <p class="lead">Authors</p>
+        <div id="authorsDiv" class="list-group" data-bind="template:{foreach:authors}">
+
+            <a href="#" class="list-group-item" data-bind="text: Name"></a>
 
         </div>
     </div>
@@ -24,7 +31,7 @@
 
             <div class="col-sm-4 col-lg-4 col-md-4 book">
                 <div class="thumbnail">
-                    <img data-bind="attr:{src:'http://www.publicbookstore.com/' + ImageUrl}" alt="">
+                    <img data-bind="attr:{src:'http://www.publicbookstore.com' + ImageUrl}" alt="">
                     <div class="caption">
                         <h4 class="pull-right" data-bind="text: '$'+ Price"></h4>
                         <h4>
@@ -41,7 +48,7 @@
                 </div>
             </div>
 
-            
+
 
         </div>
 
@@ -55,15 +62,26 @@
         var apiUrl = "http://www.publicbookstore.com";
         $(document).ready(function () {
 
-           
+            $(".genre").on('click', GenreSelector);
 
-            //Bind
-            ko.applyBindings(new bookModel(), document.getElementById("booksDiv"));
+            //Binding
+
+            //Authors
+            ko.applyBindings(new authorModel(), document.getElementById("authorsDiv"));
+            //Genres
             ko.applyBindings(new genreModel(), document.getElementById("genresDiv"));
+            // Books
+            ko.applyBindings(new bookModel(), document.getElementById("booksDiv"));
 
-          
-         
+
+
+
         });
+
+        function GenreSelector() {
+
+        }
+
 
         //Books
         function bookModel() {
@@ -84,6 +102,16 @@
             $.getJSON(apiUrl + "/api/genre")
                 .done(function (response) {
                     self.genres(response);
+                });
+        }
+
+        //Authors
+        function authorModel() {
+            var self = this;
+            self.authors = ko.observableArray([]);
+            $.getJSON(apiUrl + "/api/author")
+                .done(function (response) {
+                    self.authors(response);
                 });
         }
 

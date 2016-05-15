@@ -16,8 +16,8 @@ namespace PublicBookStore.API.Controllers
     public class AuthorController : ApiController
     {
         private AuthorRepository _authorRepo;
-        private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Book, BookDTO>());
-        private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<BookDTO, Book>());
+        private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Author, AuthorDTO>());
+        private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<AuthorDTO, Author>());
 
         public AuthorController()
         {

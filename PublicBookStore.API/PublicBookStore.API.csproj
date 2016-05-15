@@ -250,8 +250,10 @@
     </Content>
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\Books\apollo.jpg" />
+    <Content Include="Content\Books\vampire.jpg" />
     <Content Include="Content\Books\endofwatch.jpg" />
     <Content Include="Content\Books\mebeforeyou.jpg" />
+    <Content Include="Content\Books\thelastmile.jpg" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
