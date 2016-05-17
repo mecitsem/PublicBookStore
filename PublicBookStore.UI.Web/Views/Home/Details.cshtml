@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="row">
+
+    <div class="col-md-3">
+        <div class="thumbnail">
+            <img src="http://www.publicbookstore.com/Content/Books/mebeforeyou.jpg" alt="...">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span class="pull-right">$24</span>
+                    <span class="pull-left">Price</span>
+                    &nbsp;
+                </li>
+                <li class="list-group-item">
+                    <span class="pull-right">Jojo Moyes</span>
+                    <span class="pull-left">Author</span>
+                    &nbsp;
+                </li>
+                <li class="list-group-item">
+                    <span class="pull-right">Romantic Novel</span>
+                    <span class="pull-left">Genre</span>
+                    &nbsp;
+                </li>
+                <li class="list-group-item">
+                    <span class="pull-right">@DateTime.Now.ToString("MMMM yyyy")</span>
+                    <span class="pull-left">Published</span>
+                    &nbsp;
+                </li>
+
+            </ul>
+            <div class="caption">
+                <div class="row">
+                    <div class="col-md-6">
+                        <span class="pull-left">
+                            <select class="form-control">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </span>
+
+                    </div>
+                    <div class="col-md-6">
+                        <span class="pull-right"><button class="btn btn-success">Add to Cart</button></span>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        FREE Shipping on orders with at least $25 of books.
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+       
+       
+
+    </div>
+
+    <div class="col-md-9">
+        <h1>Me Before You</h1>
+        <p>
+            <h4>Author : Jojo Moyes </h4>
+            <h5>Published : @DateTime.Now.ToString("MMMM yyyy")</h5>
+        </p>
+        <p>
+            Louisa Clark is an ordinary girl living an exceedingly ordinary life—steady boyfriend, close family—who has barely been farther afield than their tiny village. She takes a badly needed job working for ex–Master of the Universe Will Traynor, who is wheelchair bound after an accident. Will has always lived a huge life—big deals, extreme sports, worldwide travel—and now he’s pretty sure he cannot live the
+        </p>
+
+    </div>
+
+</div>
+

@@ -18,7 +18,11 @@ namespace PublicBookStore.UI.Web.Controllers
         {
             return View();
         }
-   
+
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
 
     }
 }
