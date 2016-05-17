@@ -9,26 +9,16 @@
 
     <div class="col-md-3">
         <p class="lead">Genres</p>
+        <a href="#" class="list-group-item" onclick="FilterbyGenre(null)" ><span>All</span></a>
         <div id="genresDiv" class="list-group" data-bind="template:{foreach:genres}">
-
-            <a href="#" class="list-group-item genre" data-bind="text: Name"></a>
-
-        </div>
-
-        <p class="lead">Authors</p>
-        <div id="authorsDiv" class="list-group" data-bind="template:{foreach:authors}">
-
-            <a href="#" class="list-group-item" data-bind="text: Name"></a>
-
+            <a href="#" class="list-group-item genre" data-bind="click: function() { FilterbyGenre(GenreId) }"><span data-bind="text: Name"></span></a>
         </div>
     </div>
 
-    <div class="col-md-9">
-
-        <div id="booksDiv" class="row" data-bind="template:{foreach:books}">
-
-
-
+    <div id="booksDiv" class="col-md-9">
+        <button id="btnFilter" style="display:none" data-bind="click: function() { booksFilter() }"></button>
+        <input type="hidden" id="selectedGenreId" />
+        <div class="row" data-bind="template:{foreach:filterBooks}">
             <div class="col-sm-4 col-lg-4 col-md-4 book">
                 <div class="thumbnail">
                     <img data-bind="attr:{src:'http://www.publicbookstore.com' + ImageUrl}" alt="">
@@ -47,14 +37,14 @@
                     </div>
                 </div>
             </div>
-
-
-
         </div>
 
     </div>
 
 </div>
+
+
+
 @section Scripts {
 
     <script type="text/javascript">
@@ -62,36 +52,54 @@
         var apiUrl = "http://www.publicbookstore.com";
         $(document).ready(function () {
 
-            $(".genre").on('click', GenreSelector);
-
             //Binding
 
-            //Authors
-            ko.applyBindings(new authorModel(), document.getElementById("authorsDiv"));
+
+
             //Genres
             ko.applyBindings(new genreModel(), document.getElementById("genresDiv"));
-            // Books
+
+            //Book
             ko.applyBindings(new bookModel(), document.getElementById("booksDiv"));
-
-
-
 
         });
 
-        function GenreSelector() {
-
+        function FilterbyGenre(genreId) {
+            //alert(genreId);
+            $("#selectedGenreId").val(genreId);
+            $("#btnFilter").click();
         }
-
 
         //Books
         function bookModel() {
             var self = this;
             self.books = ko.observableArray([]);
-
-            $.getJSON(apiUrl + "/api/book")
-                .done(function (response) {
+            self.currentFilter = ko.observable();
+            var loadingBar = $("#pleaseWait");
+            loadingBar.show();
+            $.getJSON(apiUrl + "/api/book").
+                success(function (response) {
                     self.books(response);
+                })
+                .done(function (response) {
+                    loadingBar.hide();
                 });
+
+            self.filterBooks = ko.computed(function () {
+                if (!self.currentFilter())
+                    return self.books();
+                else {
+                    return ko.utils.arrayFilter(self.books(), function (b) {
+                        return String(b.GenreId) == self.currentFilter();
+                    });
+                }
+            });
+
+            self.booksFilter = function () {
+
+                var genreId = $("#selectedGenreId").val();
+                self.currentFilter(genreId);
+            }
         }
 
         //Genres
@@ -100,20 +108,13 @@
             self.genres = ko.observableArray([]);
 
             $.getJSON(apiUrl + "/api/genre")
-                .done(function (response) {
+                .success(function (response) {
                     self.genres(response);
+
                 });
         }
 
-        //Authors
-        function authorModel() {
-            var self = this;
-            self.authors = ko.observableArray([]);
-            $.getJSON(apiUrl + "/api/author")
-                .done(function (response) {
-                    self.authors(response);
-                });
-        }
+
 
     </script>
 
