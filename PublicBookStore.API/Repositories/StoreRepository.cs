@@ -83,8 +83,10 @@ namespace PublicBookStore.API.Repositories
 
         public void AddOrUpdateOrderDetail(OrderDetail orderDetail)
         {
-            if (context.OrderDetails.Contains(orderDetail))
-                context.Entry(orderDetail).State = System.Data.Entity.EntityState.Modified;
+            if (context.OrderDetails.Any(o=> o.OrderDetailId.Equals(orderDetail.OrderDetailId)))
+            {
+               //TODO:
+            }
             else
                 context.OrderDetails.Add(orderDetail);
         }

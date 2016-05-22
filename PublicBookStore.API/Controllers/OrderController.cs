@@ -16,13 +16,13 @@ namespace PublicBookStore.API.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class OrderController : ApiController
     {
-        private OrderRepository _orderRepo;
+        private IOrderRepository _orderRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDTO>());
         private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<OrderDTO, Order>());
 
-        public OrderController()
+        public OrderController(IOrderRepository orderRepository)
         {
-            _orderRepo = new OrderRepository();
+            this._orderRepo = orderRepository;
         }
 
         /// <summary>

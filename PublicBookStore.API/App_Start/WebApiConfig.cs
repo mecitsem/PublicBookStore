@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.Practices.Unity;
+using PublicBookStore.API.Initializer;
+using PublicBookStore.API.Interfaces;
+using PublicBookStore.API.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -10,6 +14,10 @@ namespace PublicBookStore.API
     {
         public static void Register(HttpConfiguration config)
         {
+
+            // Initialization of Unity container
+            Bootstrapper.Initialise(config);
+
             // Web API configuration and services
             var cors = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors(cors);

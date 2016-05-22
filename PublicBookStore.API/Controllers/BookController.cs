@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PublicBookStore.API.DTOs;
+using PublicBookStore.API.Interfaces;
 using PublicBookStore.API.Models;
 using PublicBookStore.API.Repositories;
 using System;
@@ -15,13 +16,13 @@ namespace PublicBookStore.API.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class BookController : ApiController
     {
-        private BookRepository _bookRepo;
+        private IBookRepository _bookRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Book, BookDTO>());
         private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<BookDTO, Book>());
 
-        public BookController()
+        public BookController(IBookRepository bookRepository)
         {
-            _bookRepo = new BookRepository();
+            this._bookRepo = bookRepository;
         }
 
         public IEnumerable<BookDTO> Get()
