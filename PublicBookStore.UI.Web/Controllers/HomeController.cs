@@ -19,9 +19,15 @@ namespace PublicBookStore.UI.Web.Controllers
             return View();
         }
 
-        public ActionResult Details(int id)
+        public ActionResult Detail(int? id)
         {
-            return View();
+            var bookModel = new BookModel();
+            ViewBag.IsExist = id.HasValue;
+            if (id.HasValue)
+            {
+                bookModel.BookId = (int)id;
+            }
+            return View(bookModel);
         }
 
     }

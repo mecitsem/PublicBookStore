@@ -36,6 +36,42 @@
         </footer>
     </div>
 
+    <script type="text/javascript">
+        var rootUrl = "http://www.publicbookstore.com";
+        var detailUrl = '/Home/Detail/';
+        function GetAuthorName(authorId,async) {
+            $.ajaxSetup({
+                async: async
+            });
+            var result = '';
+            $.getJSON(rootUrl + "/api/author/" + authorId).
+              success(function (res) {
+                  result = res.Name;
+              });
+            $.ajaxSetup({
+                async: !async
+            });
+            return result;
+        }
+
+        function GetGenreName(genreID, async) {
+            $.ajaxSetup({
+                async: async
+            });
+            var result = '';
+            $.getJSON(rootUrl + "/api/genre/" + genreID).
+              success(function (res) {
+                  result = res.Name;
+              });
+
+            $.ajaxSetup({
+                async: !async
+            });
+            return result;
+        }
+
+    </script>
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/knockout")

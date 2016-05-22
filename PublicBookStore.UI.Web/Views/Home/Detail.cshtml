@@ -1,0 +1,135 @@
+﻿@model PublicBookStore.UI.Web.Models.BookModel
+@{
+    ViewBag.Title = "Detail";
+}
+@if (ViewBag.IsExist)
+{
+    <div id="bookDetailDiv" class="row">
+
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <img data-bind="attr: {src : ImageUrl}" alt="...">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="pull-right" data-bind="text: Price"></span>
+                        <span class="pull-left">Price</span>
+                        &nbsp;
+                    </li>
+                    <li class="list-group-item">
+                        <span class="pull-right" data-bind="text: Author"></span>
+                        <span class="pull-left">Author</span>
+                        &nbsp;
+                    </li>
+                    <li class="list-group-item">
+                        <span class="pull-right" data-bind="text: Genre"></span>
+                        <span class="pull-left">Genre</span>
+                        &nbsp;
+                    </li>
+                    <li class="list-group-item">
+                        <span class="pull-right" data-bind="text:Published"></span>
+                        <span class="pull-left">Published</span>
+                        &nbsp;
+                    </li>
+
+                </ul>
+                <div class="caption">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="pull-left">
+                                <select class="form-control">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <span class="pull-right"><button class="btn btn-success">Add to Cart</button></span>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            FREE Shipping on orders with at least $25 of books.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <div class="col-md-9">
+            <h1 data-bind="text: Title"></h1>
+            <p>
+                <h4>Author : <span data-bind="text: Author"></span></h4>
+                <h5>Published : <span data-bind="text: Published"></span></h5>
+            </p>
+            <p data-bind="text: Description">
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+}
+else
+{
+    <div class="alert alert-danger" role="alert">Opps! Please select a book</div>
+}
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var bookId = @(Model.BookId);
+            if(bookId == 0 || bookId == 'undefined') return false;
+
+            BindBookDetail(bookId);
+        });
+
+        function BindBookDetail(bookId) {
+
+            var loadingBar = $("#pleaseWait");
+            loadingBar.show();
+            $.getJSON(rootUrl + "/api/book/" +bookId).
+                success(function (res) {
+                    loadingBar.hide();
+
+                    var author = GetAuthorName(res.AuthorId, false);
+                    var genre = GetGenreName(res.GenreId, false);
+
+                    var bookViewModel = {
+                        BookId : ko.observable(res.BookId),
+                        Author : ko.observable(author),
+                        Genre : ko.observable(genre),
+                        Title : ko.observable(res.Title),
+                        Price : ko.observable(res.Price),
+                        Description : ko.observable(res.Description),
+                        ImageUrl : ko.observable(rootUrl + res.ImageUrl),
+                        Published : ko.observable(new moment(res.Published).format("MMM Do YY"))
+                    };
+
+        
+
+                    //Book
+                    ko.applyBindings(bookViewModel);
+                })
+                .done(function (response) {
+                    loadingBar.hide();
+                });
+        }
+
+        
+
+    </script>
+}
