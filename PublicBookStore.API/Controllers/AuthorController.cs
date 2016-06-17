@@ -20,19 +20,21 @@ namespace PublicBookStore.API.Controllers
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Author, AuthorDTO>());
         private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<AuthorDTO, Author>());
 
+
+
         public AuthorController(IAuthorRepository authorRepository)
         {
             this._authorRepo = authorRepository;
         }
 
-        public IEnumerable<AuthorDTO> Get()
+        public HttpResponseMessage Get()
         {
             var authors = _authorRepo.GetAuthors();
             var mapper = config.CreateMapper();
-            return authors.AsEnumerable().Select(a => mapper.Map<Author, AuthorDTO>(a));
+            return Request.CreateResponse(HttpStatusCode.Accepted, authors.AsEnumerable().Select(a => mapper.Map<Author, AuthorDTO>(a)));
         }
 
-        public AuthorDTO Get(int id)
+        public HttpResponseMessage Get(int id)
         {
             var author = _authorRepo.GetAuthor(id);
 
@@ -40,7 +42,7 @@ namespace PublicBookStore.API.Controllers
                 throw new HttpResponseException(HttpStatusCode.NoContent);
             var mapper = config.CreateMapper();
 
-            return mapper.Map<Author, AuthorDTO>(author);
+            return Request.CreateResponse(HttpStatusCode.Accepted, mapper.Map<Author, AuthorDTO>(author));
         }
 
         public HttpResponseMessage Post(AuthorDTO author)
@@ -56,7 +58,9 @@ namespace PublicBookStore.API.Controllers
 
                 var updatedItem = _authorRepo.AddOrUpdate(a);
                 _authorRepo.SaveChanges();
+               
                 result = Request.CreateResponse(HttpStatusCode.Created, config.CreateMapper().Map<Author, AuthorDTO>(updatedItem));
+
             }
             catch (Exception ex)
             {
