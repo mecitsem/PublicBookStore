@@ -1,74 +1,108 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PublicBookStore.API.Controllers;
+﻿using PublicBookStore.API.Controllers;
 using PublicBookStore.API.DTOs;
 using System.Collections.Generic;
-using PublicBookStore.API.Interfaces;
-using PublicBookStore.API.Repositories;
-using System.Net.Http;
-using System.Web.Http;
-using PublicBookStore.API.Models;
-using PublicBookStore.API.Data;
 using System.Linq;
-using Microsoft.Practices.Unity;
+using PublicBookStore.API.Interfaces;
+using System.Net.Http;
+using PublicBookStore.API.Models;
 using AutoMapper;
+using Microsoft.Practices.Unity;
 using Moq;
-using System.Data.Entity.Core.Objects.DataClasses;
-using System.Linq.Expressions;
+using NUnit.Framework;
 
 namespace PublicBookStore.API.Tests
 {
-
+    [TestFixture]
     public class AuthorControllerTests
     {
-        private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Author, AuthorDTO>());
-        private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<AuthorDTO, Author>());
-        private IMapper mapperToEntity;
-        private IMapper mapperToDTO;
-        [TestInitialize]
+
+        IUnityContainer _container = new UnityContainer();
+      
+
+        [SetUp]
         public void Setup()
         {
-            mapperToDTO = config.CreateMapper();
-            mapperToEntity = configToEntity.CreateMapper();
+           
         }
 
 
-        [TestMethod]
+        [Test]
         public void GetAuthors_ShouldReturnAllAuthors()
         {
 
             var authors = SetupAuthors();
-            var authorRepo = SetupRepository<Author, IAuthorRepository>(authors);
 
-            AuthorController authorController = new AuthorController(authorRepo.Object);
+            if(authors == null) Assert.Fail("Authors collection is null");
+
+            //Create Mock
+            var mock = new Mock<IAuthorRepository>();
+            _container.RegisterInstance(mock.Object);
+            mock.Setup(x => x.GetAuthors()).Returns(authors);
+
+
+            //Act
+            var authorController = new AuthorController(mock.Object);
+            UnitTestHelper.SetupControllerForTests(authorController);
             var result = authorController.Get();
-            List<AuthorDTO> resultAurhors;
+            IEnumerable<AuthorDTO> resultAurhors;
             result.TryGetContentValue(out resultAurhors);
-            CollectionAssert.AreEqual(authors, resultAurhors.AsEnumerable().Select(c => mapperToEntity.Map<AuthorDTO, Author>(c)).ToList());
+            
+            //Result
+            Assert.IsNotNull(resultAurhors);
 
         }
+
+        [Test]
+        public void GetAuthor_ShouldReturnFirstAuthor()
+        {
+            //Author
+            var author = SetupAuthors().FirstOrDefault(s => s.AuthorId == 1);
+            
+            if(author == null) Assert.Fail("Author is null");
+
+            //Create Mock
+            var mock = new Mock<IAuthorRepository>();
+            _container.RegisterInstance(mock.Object);
+            mock.Setup(x => x.GetAuthor(1)).Returns(author);
+            
+            //Act
+            var authorController = new AuthorController(mock.Object);
+            UnitTestHelper.SetupControllerForTests(authorController);
+            var result = authorController.Get(1); //J. K. Rowling
+            AuthorDTO responseAuthorDto;
+            result.TryGetContentValue(out responseAuthorDto);
+            
+            //Result
+            Assert.IsNotNull(responseAuthorDto);
+            Assert.AreSame(author.Name, responseAuthorDto.Name);
+        }
+
 
 
         #region Private member methods
 
-        private List<Author> SetupAuthors()
+        private static IEnumerable<Author> SetupAuthors()
         {
-            var authors = new List<Author>();
-            authors.Add(new Author { AuthorId = 1, Name = "J. K. Rowling" });
-            authors.Add(new Author { AuthorId = 2, Name = "Bella Forrest" });
-            authors.Add(new Author { AuthorId = 3, Name = "David Baldacci" });
+            var authors = new List<Author>
+            {
+                new Author {AuthorId = 1, Name = "J. K. Rowling"},
+                new Author {AuthorId = 2, Name = "Bella Forrest"},
+                new Author {AuthorId = 3, Name = "David Baldacci"}
+            };
             return authors;
         }
 
-        private Mock<TRepo> SetupRepository<TModel, TRepo>(List<TModel> models)
-            where TModel : Author, new()
-            where TRepo : class, IAuthorRepository
-        {
-            Mock<TRepo> repository = new Mock<TRepo>();
-            repository.Setup(x => x.GetAuthors()).Returns(models);
+        //private Mock<TRepo> SetupRepository<TModel, TRepo>(IEnumerable<TModel> models)
+        //    where TModel : Author, new()
+        //    where TRepo : class, IAuthorRepository
+        //{
+        //    var mock = new Mock<TRepo>();
+        //    container.RegisterInstance<IAuthorRepository>(mock.Object);
+        //    mock.Setup(x => x.GetAuthors()).Returns(models);
+        //    return mock;
+        //}
 
-            return repository;
-        }
+
 
         #endregion
 
