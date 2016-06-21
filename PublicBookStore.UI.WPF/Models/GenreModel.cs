@@ -8,6 +8,7 @@ namespace PublicBookStore.UI.WPF.Models
 {
     public class GenreModel : BaseModel
     {
+        public int GenreId { get; set; }
         public string Name { get; set; }
     }
 }

@@ -1,6 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Newtonsoft.Json;
+using PublicBookStore.UI.WPF.Helpers;
 using PublicBookStore.UI.WPF.Models;
 
 namespace PublicBookStore.UI.WPF
@@ -17,36 +24,51 @@ namespace PublicBookStore.UI.WPF
         public MainWindow()
         {
             InitializeComponent();
-
-            LayoutListBox.DataContext = GenreDataSource;
+            BindGenres();
 
         }
 
-        private List<GenreModel> GenreDataSource => _genreDataSource ?? (_genreDataSource = SampleData());
+
 
         private void HandleSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //throw new NotImplementedException();
         }
 
-        private List<GenreModel> SampleData()
+        private async void BindGenres()
         {
-            var data = new List<GenreModel>()
+            try
             {
-                new GenreModel()
-                {
-                    Id = 1,
-                    Name = "Genre1"
-                },
-                new GenreModel()
-                {
-                    Id = 2,
-                    Name = "Genre2"
-                }
-            };
+                var data = await GetGenres();
 
-            return data;
-            
+                LayoutListBox.DataContext = data;
+            }
+            catch
+            {
+                // TODO: Log
+            }
         }
+
+        private static async Task<List<GenreModel>> GetGenres()
+        {
+            var data = new List<GenreModel>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ConfigHelper.ApiUri);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // Response:
+                var response = await client.GetAsync("api/genre");
+                if (!response.IsSuccessStatusCode) return data;
+                var genresJsonData = await response.Content.ReadAsStringAsync();
+
+                data = JsonConvert.DeserializeObject<List<GenreModel>>(genresJsonData);
+            }
+
+            return data.OrderBy(o => o.Name).ToList();
+
+        }
+
     }
 }
