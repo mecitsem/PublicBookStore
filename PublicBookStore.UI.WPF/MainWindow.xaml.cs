@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using PublicBookStore.UI.WPF.Models;
 
 namespace PublicBookStore.UI.WPF
 {
@@ -20,9 +10,43 @@ namespace PublicBookStore.UI.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Fields
+
+        private List<GenreModel> _genreDataSource;
+        #endregion
         public MainWindow()
         {
             InitializeComponent();
+
+            LayoutListBox.DataContext = GenreDataSource;
+
+        }
+
+        private List<GenreModel> GenreDataSource => _genreDataSource ?? (_genreDataSource = SampleData());
+
+        private void HandleSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private List<GenreModel> SampleData()
+        {
+            var data = new List<GenreModel>()
+            {
+                new GenreModel()
+                {
+                    Id = 1,
+                    Name = "Genre1"
+                },
+                new GenreModel()
+                {
+                    Id = 2,
+                    Name = "Genre2"
+                }
+            };
+
+            return data;
+            
         }
     }
 }
