@@ -112,6 +112,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AuthorControllerTests.cs" />
+    <Compile Include="BookControllerTests.cs" />
+    <Compile Include="GenreControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTestHelper.cs" />
   </ItemGroup>
