@@ -11,19 +11,19 @@ namespace PublicBookStore.API.Repositories
 {
     public class BookRepository : IBookRepository, IDisposable
     {
-        private PublicBookStoreEntities context;
+        private PublicBookStoreEntities _context;
 
         public BookRepository()
         {
-            this.context = new PublicBookStoreEntities();
+            this._context = new PublicBookStoreEntities();
         }
 
-        public Book AddOrUpdate(Book book)
+        public virtual Book AddOrUpdate(Book book)
         {
             Book result;
-            if (context.Books.Any(b => b.BookId.Equals(book.BookId)))
+            if (_context.Books.Any(b => b.BookId.Equals(book.BookId)))
             {
-                var exBook = context.Books.Find(book.BookId);
+                var exBook = _context.Books.Find(book.BookId);
                 exBook.Author = book.Author;
                 exBook.AuthorId = book.AuthorId;
                 exBook.Description = book.Description;
@@ -33,54 +33,54 @@ namespace PublicBookStore.API.Repositories
                 exBook.Price = book.Price;
                 exBook.Title = book.Title;
                 exBook.Published = book.Published;
-                context.Entry(book).State = System.Data.Entity.EntityState.Modified;
+                _context.Entry(book).State = System.Data.Entity.EntityState.Modified;
                 result = exBook;
             }
             else
-                result = context.Books.Add(book);
+                result = _context.Books.Add(book);
 
             return result;
         }
 
-        public IEnumerable<Author> Authors()
+        public virtual IEnumerable<Author> Authors()
         {
-            return context.Authors;
+            return _context.Authors;
         }
 
-        public void Delete(int id)
+        public virtual void Delete(int id)
         {
-            var book = context.Books.Find(id);
-            context.Books.Remove(book);
+            var book = _context.Books.Find(id);
+            _context.Books.Remove(book);
         }
 
-        public IEnumerable<Genre> Genres()
+        public virtual IEnumerable<Genre> Genres()
         {
-            return context.Genres.ToList();
+            return _context.Genres.ToList();
         }
 
-        public Book GetBook(int id)
+        public virtual Book GetBook(int id)
         {
-            return context.Books.Find(id);
+            return _context.Books.Find(id);
         }
 
-        public IEnumerable<Book> GetBooks()
+        public virtual IEnumerable<Book> GetBooks()
         {
-            return context.Books.ToList();
+            return _context.Books.ToList();
         }
 
-        public IEnumerable<Book> GetBooksByAuthorId(int authorId)
+        public virtual IEnumerable<Book> GetBooksByAuthorId(int authorId)
         {
-            return context.Books.Where(b => b.AuthorId.Equals(authorId)).ToList();
+            return _context.Books.Where(b => b.AuthorId.Equals(authorId)).ToList();
         }
 
-        public IEnumerable<Book> GetBooksByGenreId(int genreId)
+        public virtual IEnumerable<Book> GetBooksByGenreId(int genreId)
         {
-            return context.Books.Where(b => b.GenreId.Equals(genreId)).ToList();
+            return _context.Books.Where(b => b.GenreId.Equals(genreId)).ToList();
         }
 
-        public void SaveChanges()
+        public virtual void SaveChanges()
         {
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
         private bool disposed = false;
@@ -90,7 +90,7 @@ namespace PublicBookStore.API.Repositories
             {
                 if (disposing)
                 {
-                    context.Dispose();
+                    _context.Dispose();
                 }
             }
             this.disposed = true;

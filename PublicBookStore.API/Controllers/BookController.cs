@@ -2,9 +2,7 @@
 using PublicBookStore.API.DTOs;
 using PublicBookStore.API.Interfaces;
 using PublicBookStore.API.Models;
-using PublicBookStore.API.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -16,25 +14,30 @@ namespace PublicBookStore.API.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class BookController : ApiController
     {
+        #region Fields
         private IBookRepository _bookRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Book, BookDTO>());
         private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<BookDTO, Book>());
+        #endregion
 
+        #region Constructors
         public BookController(IBookRepository bookRepository)
         {
-            this._bookRepo = bookRepository;
+            _bookRepo = bookRepository;
         }
+        #endregion
 
-        public IEnumerable<BookDTO> Get()
+        #region Methods
+        public HttpResponseMessage Get()
         {
             var books = _bookRepo.GetBooks();
             //Mapper
             var mapper = config.CreateMapper();
-
-            return books.AsEnumerable().Select(dto => mapper.Map<Book, BookDTO>(dto));
+            var content = books.AsEnumerable().Select(dto => mapper.Map<Book, BookDTO>(dto)).ToList();
+            return Request.CreateResponse(HttpStatusCode.OK, content);
         }
 
-        public BookDTO Get(int id)
+        public HttpResponseMessage Get(int id)
         {
             var book = _bookRepo.GetBook(id);
 
@@ -43,13 +46,13 @@ namespace PublicBookStore.API.Controllers
 
             //Mapper
             var mapper = config.CreateMapper();
-
-            return mapper.Map<Book, BookDTO>(book);
+            var content = mapper.Map<Book, BookDTO>(book);
+            return Request.CreateResponse(HttpStatusCode.OK, content);
         }
 
         public HttpResponseMessage Post(BookDTO book)
         {
-            HttpResponseMessage result = null;
+            HttpResponseMessage result;
             try
             {
                 if (book == null)
@@ -74,7 +77,7 @@ namespace PublicBookStore.API.Controllers
         // DELETE api/book/5
         public HttpResponseMessage Delete(int id)
         {
-            HttpResponseMessage result = null;
+            HttpResponseMessage result;
             try
             {
                 _bookRepo.Delete(id);
@@ -94,5 +97,6 @@ namespace PublicBookStore.API.Controllers
             _bookRepo.Dispose();
             base.Dispose(disposing);
         }
+        #endregion
     }
 }

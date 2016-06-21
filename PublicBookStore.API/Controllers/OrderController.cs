@@ -16,25 +16,31 @@ namespace PublicBookStore.API.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class OrderController : ApiController
     {
+        #region Fields
         private IOrderRepository _orderRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDTO>());
         private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<OrderDTO, Order>());
+        #endregion
 
+        #region Constructors
         public OrderController(IOrderRepository orderRepository)
         {
-            this._orderRepo = orderRepository;
+            _orderRepo = orderRepository;
         }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id">username</param>
         /// <returns></returns>
-        public IEnumerable<OrderDTO> Get(string id)
+        public HttpResponseMessage Get(string id)
         {
             var orders = _orderRepo.GetOrders(id);
             var mapper = config.CreateMapper();
-            return orders.AsEnumerable().Select(a => mapper.Map<Order, OrderDTO>(a));
+            var content = orders.AsEnumerable().Select(a => mapper.Map<Order, OrderDTO>(a)).ToList();
+            return Request.CreateResponse(HttpStatusCode.OK, content);
         }
 
         protected override void Dispose(bool disposing)
@@ -42,5 +48,6 @@ namespace PublicBookStore.API.Controllers
             _orderRepo.Dispose();
             base.Dispose(disposing);
         }
+        #endregion
     }
 }

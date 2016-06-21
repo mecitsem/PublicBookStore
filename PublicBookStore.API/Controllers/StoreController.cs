@@ -16,18 +16,23 @@ namespace PublicBookStore.API.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class StoreController : ApiController
     {
+
+        #region Fields
         private IStoreRepository _storeRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Cart, CartDTO>());
         private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<CartDTO, Cart>());
+        #endregion
 
+        #region Constructors
         public StoreController(IStoreRepository storeRepository)
         {
             this._storeRepo = storeRepository;
         }
+        #endregion
 
-
+        #region Methods
         // GET api/store/5
-        public IEnumerable<CartDTO> Get(string id)
+        public HttpResponseMessage Get(string id)
         {
             var carts = _storeRepo.GetCarts(id);
 
@@ -36,8 +41,8 @@ namespace PublicBookStore.API.Controllers
 
             //Mapper
             var mapper = config.CreateMapper();
-
-            return carts.AsEnumerable().Select(c => mapper.Map<Cart, CartDTO>(c));
+            var content = carts.AsEnumerable().Select(c => mapper.Map<Cart, CartDTO>(c)).ToList();
+            return Request.CreateResponse(HttpStatusCode.OK, content);
         }
 
         public HttpResponseMessage Post(CartDTO cart)
@@ -89,5 +94,6 @@ namespace PublicBookStore.API.Controllers
             _storeRepo.Dispose();
             base.Dispose(disposing);
         }
+        #endregion
     }
 }

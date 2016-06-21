@@ -1,12 +1,7 @@
 ﻿using Microsoft.Practices.Unity;
 using PublicBookStore.API.Interfaces;
 using PublicBookStore.API.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
-using System.Web.Mvc;
 
 namespace PublicBookStore.API.Initializer
 {

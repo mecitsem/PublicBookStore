@@ -2,9 +2,7 @@
 using PublicBookStore.API.DTOs;
 using PublicBookStore.API.Interfaces;
 using PublicBookStore.API.Models;
-using PublicBookStore.API.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -16,25 +14,30 @@ namespace PublicBookStore.API.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class GenreController : ApiController
     {
+        #region Fields
         private IGenreRepository _genreRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Genre, GenreDTO>());
         private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<GenreDTO, Genre>());
+        #endregion
 
+        #region Constructors
         public GenreController(IGenreRepository genreRepository)
         {
-            this._genreRepo = genreRepository;
+            _genreRepo = genreRepository;
         }
+        #endregion
 
-        public IEnumerable<GenreDTO> Get()
+        #region Methods
+        public HttpResponseMessage Get()
         {
             var genres = _genreRepo.GetGenres();
             //Mapper
             var mapper = config.CreateMapper();
-
-            return genres.AsEnumerable().Select(d => mapper.Map<Genre, GenreDTO>(d)).ToList();
+            var content = genres.AsEnumerable().Select(d => mapper.Map<Genre, GenreDTO>(d)).ToList();
+            return Request.CreateResponse(HttpStatusCode.OK, content);
         }
 
-        public GenreDTO Get(int id)
+        public HttpResponseMessage Get(int id)
         {
             var genre = _genreRepo.GetGenre(id);
 
@@ -42,13 +45,13 @@ namespace PublicBookStore.API.Controllers
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             var mapper = config.CreateMapper();
-
-            return mapper.Map<Genre, GenreDTO>(genre);
+            var content = mapper.Map<Genre, GenreDTO>(genre);
+            return Request.CreateResponse(HttpStatusCode.OK, content);
         }
 
         public HttpResponseMessage Post(GenreDTO genre)
         {
-            HttpResponseMessage result = null;
+            HttpResponseMessage result;
             if (genre == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             try
@@ -70,7 +73,7 @@ namespace PublicBookStore.API.Controllers
 
         public HttpResponseMessage Delete(int id)
         {
-            HttpResponseMessage result = null;
+            HttpResponseMessage result;
             try
             {
                 _genreRepo.Delete(id);
@@ -89,6 +92,6 @@ namespace PublicBookStore.API.Controllers
             _genreRepo.Dispose();
             base.Dispose(disposing);
         }
-
+        #endregion
     }
 }

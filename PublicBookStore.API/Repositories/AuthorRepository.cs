@@ -11,64 +11,68 @@ namespace PublicBookStore.API.Repositories
 {
     public class AuthorRepository : IAuthorRepository, IDisposable
     {
-        private PublicBookStoreEntities context;
+        private PublicBookStoreEntities _context;
 
         public AuthorRepository()
         {
-            this.context = new PublicBookStoreEntities();
+            this._context = new PublicBookStoreEntities();
         }
 
-        public Author AddOrUpdate(Author author)
+        public virtual Author AddOrUpdate(Author author)
         {
             Author result = null;
-            if (context.Authors.Any(a => a.AuthorId.Equals(author.AuthorId)))
+            if (_context.Authors.Any(a => a.AuthorId.Equals(author.AuthorId)))
             {
-                var exAuthor = context.Authors.Find(author.AuthorId);
+                var exAuthor = _context.Authors.FirstOrDefault(a => a.AuthorId.Equals(author.AuthorId));
+                if(exAuthor == null)
+                    throw new ArgumentNullException(nameof(author));
+
                 exAuthor.Name = author.Name;
-                context.Entry(author).State = System.Data.Entity.EntityState.Modified;
+                _context.Entry(author).State = System.Data.Entity.EntityState.Modified;
+
                 result = exAuthor;
             }
             else
-                result = context.Authors.Add(author);
+                result = _context.Authors.Add(author);
 
             return result;
         }
 
-        public void Delete(int id)
+        public virtual void Delete(int id)
         {
-            var author = context.Authors.Find(id);
-            context.Authors.Remove(author);
+            var author = _context.Authors.FirstOrDefault(a => a.AuthorId.Equals(id));
+            _context.Authors.Remove(author);
         }
 
-        public Author GetAuthor(int id)
+        public virtual Author GetAuthor(int id)
         {
-            return context.Authors.Find(id);
+            return _context.Authors.Find(id);
         }
 
-        public IEnumerable<Author> GetAuthors()
+        public virtual IEnumerable<Author> GetAuthors()
         {
-            return context.Authors.ToList();
+            return _context.Authors.ToList();
         }
 
-        public void SaveChanges()
+        public virtual void SaveChanges()
         {
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
-        private bool disposed = false;
+        private bool _disposed;
         public virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!this._disposed)
             {
                 if (disposing)
                 {
-                    context.Dispose();
+                    _context.Dispose();
                 }
             }
-            this.disposed = true;
+            this._disposed = true;
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);

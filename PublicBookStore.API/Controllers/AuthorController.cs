@@ -2,9 +2,7 @@
 using PublicBookStore.API.DTOs;
 using PublicBookStore.API.Interfaces;
 using PublicBookStore.API.Models;
-using PublicBookStore.API.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -16,38 +14,46 @@ namespace PublicBookStore.API.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class AuthorController : ApiController
     {
+        #region Fields
         private IAuthorRepository _authorRepo;
         private MapperConfiguration config = new MapperConfiguration(cfg => cfg.CreateMap<Author, AuthorDTO>());
         private MapperConfiguration configToEntity = new MapperConfiguration(cfg => cfg.CreateMap<AuthorDTO, Author>());
+        #endregion
 
-
-
+        #region Constructors
         public AuthorController(IAuthorRepository authorRepository)
         {
-            this._authorRepo = authorRepository;
+            _authorRepo = authorRepository;
         }
+        #endregion
 
+        #region Methods
         public HttpResponseMessage Get()
         {
+
             var authors = _authorRepo.GetAuthors();
             var mapper = config.CreateMapper();
-            return Request.CreateResponse(HttpStatusCode.Accepted, authors.AsEnumerable().Select(a => mapper.Map<Author, AuthorDTO>(a)));
+            var content = authors.AsEnumerable().Select(a => mapper.Map<Author, AuthorDTO>(a)).ToList();
+            return Request.CreateResponse(HttpStatusCode.OK, content);
         }
 
         public HttpResponseMessage Get(int id)
         {
+
+
             var author = _authorRepo.GetAuthor(id);
 
             if (author == null)
                 throw new HttpResponseException(HttpStatusCode.NoContent);
             var mapper = config.CreateMapper();
-
-            return Request.CreateResponse(HttpStatusCode.Accepted, mapper.Map<Author, AuthorDTO>(author));
+            var content = mapper.Map<Author, AuthorDTO>(author);
+            return Request.CreateResponse(HttpStatusCode.OK, content);
         }
 
         public HttpResponseMessage Post(AuthorDTO author)
         {
-            HttpResponseMessage result = null;
+
+            HttpResponseMessage result;
             try
             {
                 if (author == null)
@@ -58,8 +64,8 @@ namespace PublicBookStore.API.Controllers
 
                 var updatedItem = _authorRepo.AddOrUpdate(a);
                 _authorRepo.SaveChanges();
-               
-                result = Request.CreateResponse(HttpStatusCode.Created, config.CreateMapper().Map<Author, AuthorDTO>(updatedItem));
+                var content = config.CreateMapper().Map<Author, AuthorDTO>(updatedItem);
+                result = Request.CreateResponse(HttpStatusCode.Created, content);
 
             }
             catch (Exception ex)
@@ -73,12 +79,13 @@ namespace PublicBookStore.API.Controllers
 
         public HttpResponseMessage Delete(int id)
         {
-            HttpResponseMessage result = null;
+
+            HttpResponseMessage result;
             try
             {
                 _authorRepo.Delete(id);
                 _authorRepo.SaveChanges();
-                result = Request.CreateResponse(HttpStatusCode.Accepted);
+                result = Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -92,6 +99,7 @@ namespace PublicBookStore.API.Controllers
             _authorRepo.Dispose();
             base.Dispose(disposing);
         }
+        #endregion
 
     }
 }
