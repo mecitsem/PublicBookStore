@@ -5,8 +5,155 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PublicBookStore.UI.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Public Book Store" Height="350" Width="790.466" WindowState="Maximized" WindowStartupLocation="CenterScreen" Loaded="MainWindow_OnLoaded">
     <Grid>
-        
+
+        <Grid.Resources>
+
+            <XmlDataProvider x:Key="SamplesList"  XPath="" Source="samples.xml" />
+
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="FontFamily" Value="Calibri" />
+                <Setter Property="FontSize" Value="10pt" />
+            </Style>
+
+            <!--BOOK LIST CATALOG VIEW -->
+            <Style x:Key="BookListStyle" TargetType="{x:Type ListBox}">
+                <Setter Property="ItemTemplate" Value="{DynamicResource BooksListItemTemplate}" />
+                <Setter Property="ItemContainerStyle" Value="{DynamicResource BooksListBokItem}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Width" Value="{Binding ElementName=Books, Path=ActualWidth}"></Setter>
+            </Style>
+            <DataTemplate x:Key="BooksListItemTemplate">
+                <StackPanel Background="Transparent">
+                    <Grid Background="Transparent">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="200"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"></ColumnDefinition>
+                            <ColumnDefinition Width="400"></ColumnDefinition>
+                            <ColumnDefinition Width="100"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="{Binding Image}" MaxHeight="200" Grid.Column="0"></Image>
+                        <StackPanel Grid.Column="1" Background="Transparent">
+                            <TextBlock Text="{Binding Title}" FontSize="18" d:DataContext="{d:DesignData }"  />
+                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap" MaxWidth="400" HorizontalAlignment="Left" d:DataContext="{d:DesignData }"   />
+                            <TextBlock Text="{Binding Price}" d:DataContext="{d:DesignData }"   Margin="0,10,0,0"/>
+                            <TextBlock Text="{Binding Published}" d:DataContext="{d:DesignData }"   Margin="0,15,0,0"/>
+                            <TextBlock Text="{Binding BookId}" d:DataContext="{d:DesignData }" Visibility="Collapsed"  ></TextBlock>
+                           
+                        </StackPanel>
+                        <Button Width="100" Height="50" Content="Add to Cart" Grid.Column="2"></Button>
+                    </Grid>
+                   
+                   
+                </StackPanel>
+            </DataTemplate>
+            <Style x:Key="BooksListBokItem" TargetType="{x:Type ListBoxItem}">
+                <Setter Property="Background" Value="Transparent"></Setter>
+                <Setter Property="Margin" Value="1" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <Grid>
+                                <Rectangle x:Name="ListBG" Fill="{TemplateBinding Background}" RadiusX="5" RadiusY="5" Stroke="transparent" />
+                                <Rectangle x:Name="GelShine" Margin="2,2,2,0" VerticalAlignment="top" RadiusX="3" RadiusY="3" Opacity="0" Fill="#ccffffff" Stroke="transparent" Height="15px" />
+                                <ContentPresenter x:Name="ContentSite" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="15,5,5,5" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="true">
+
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="true">
+                                    <Setter Property="Background" Value="sc#1, 0.7605245, 0.7758222, 0.838799" />
+                                    <Setter Property="FontWeight" Value="bold" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Background" Value="sc#1, 0.5394795, 0.597201765, 0.6866853" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
+            <!--BOOK LIST CATALOG VIEW END -->
+            
+
+
+            <!--GENRE LIST VIEW -->
+            <DataTemplate x:Key="GenreListItemTemplate">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" d:DataContext="{d:DesignData }" />
+                    <TextBlock Text="{Binding GenreId}" d:DataContext="{d:DesignData }" Visibility="Collapsed"></TextBlock>
+                </StackPanel>
+            </DataTemplate>
+            <Style x:Key="GenreListBox" TargetType="{x:Type ListBox}">
+                <Setter Property="ItemTemplate" Value="{DynamicResource GenreListItemTemplate}" />
+                <Setter Property="ItemContainerStyle" Value="{DynamicResource GenreListBoxItem}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Width" Value="186" />
+            </Style>
+            <Style x:Key="GenreListBoxItem" TargetType="{x:Type ListBoxItem}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Margin" Value="1" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <Grid>
+                                <Rectangle x:Name="ListBG" Fill="{TemplateBinding Background}" RadiusX="5" RadiusY="5" Stroke="transparent" />
+                                <Rectangle x:Name="GelShine" Margin="2,2,2,0" VerticalAlignment="top" RadiusX="3" RadiusY="3" Opacity="0" Fill="#ccffffff" Stroke="transparent" Height="15px" />
+                                <ContentPresenter x:Name="ContentSite" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="15,5,5,5" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+
+                                <Trigger Property="IsSelected" Value="true">
+
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="true">
+                                    <Setter Property="Background" Value="sc#1, 0.045186203, 0.226965874, 0.0998987257" />
+                                    <Setter Property="FontWeight" Value="bold" />
+                                    <Setter Property="Foreground" Value="White" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Background" Value="sc#1, 0.1651322, 0.20155625, 0.258182853" />
+                                    <Setter Property="Foreground" Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+            </Style>
+            <!--GENRE LIST VIEW END-->
+        </Grid.Resources>
+        <Grid  Background="sc#1, 0.658374846, 0.658374846, 0.658374846" Name="DocumentRoot" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
+            </Grid.RowDefinitions>
+            <TextBlock  Grid.RowSpan="2"  Margin="20,10,20,5" TextAlignment="left"  Foreground="Black" FontStyle="Italic" FontSize="20pt" FontFamily="Calibri" FontWeight="bold">Public Book Store</TextBlock>
+            <Grid Grid.Row="1">
+                <Rectangle Fill="white" RadiusX="14" RadiusY="14" Margin="10" Stroke="sc#1, 0.03688945, 0.0382043719, 0.0395462364" StrokeDashArray="2"/>
+                <DockPanel LastChildFill="True"   Margin="20">
+                    <Grid  Width="200px">
+                        <Rectangle Fill="sc#1, 0.8549926, 0.8549926, 0.8549926" RadiusX="10" RadiusY="10" Stroke="sc#1, 0.07421357, 0.08650046, 0.149959788" StrokeDashArray="2" />
+                        <DockPanel Margin="7" LastChildFill="False">
+                            <ListBox Name="LayoutListBox"    ItemsSource="{Binding}" SelectionChanged="HandleSelectionChanged" Style="{DynamicResource GenreListBox}"  IsSynchronizedWithCurrentItem="True" >
+
+                            </ListBox>
+                        </DockPanel>
+                    </Grid>
+                    <DockPanel Name="Books" LastChildFill="False">
+                        <ListBox Name="BooksListBox" ItemsSource="{Binding}" Style="{DynamicResource BookListStyle}" IsSynchronizedWithCurrentItem="True"></ListBox>
+                    </DockPanel>
+                </DockPanel>
+            </Grid>
+        </Grid>
+
     </Grid>
 </Window>
