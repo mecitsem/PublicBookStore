@@ -293,7 +293,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="200"></RowDefinition>
                                     <RowDefinition Height="*"></RowDefinition>
-
+                                    <RowDefinition Height="100"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <Image x:Name="DetailImage" Source="{Binding Image}" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="10" Width="200"
                                        d:DataContext="{d:DesignData}"></Image>
@@ -328,8 +328,19 @@
                                         <!-- Values End-->
                                     </Grid>
                                 </DockPanel>
-                                
+
                                 <TextBlock Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" Width="500" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Text="Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur."></TextBlock>
+                                <StackPanel Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2" Height="50" Orientation="Horizontal" HorizontalAlignment="Right">
+                                    
+                                    <ComboBox VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="50" Height="30">
+                                        <ComboBoxItem Content="1" IsSelected="True"></ComboBoxItem>
+                                        <ComboBoxItem Content="2"></ComboBoxItem>
+                                        <ComboBoxItem Content="3"></ComboBoxItem>
+                                        <ComboBoxItem Content="4"></ComboBoxItem>
+                                        <ComboBoxItem Content="5"></ComboBoxItem>
+                                    </ComboBox>
+                                    <Button Content="Add To Cart" Style="{StaticResource AddToCartButtonStyle}" Width="100" Height="30" VerticalContentAlignment="Center" Margin="10,0,0,0"></Button>
+                                </StackPanel>
                             </Grid>
                         </DockPanel>
                     </DockPanel>
