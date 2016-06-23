@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using PublicBookStore.UI.WPF.DataService;
 using PublicBookStore.UI.WPF.Helpers;
 
 namespace PublicBookStore.UI.WPF.Models
@@ -52,5 +54,22 @@ namespace PublicBookStore.UI.WPF.Models
                 return image;
             }
         }
+
+
+
+        public async Task<string> GetGenreName()
+        {
+            var bookService = new BookStoreService();
+            var genre = await bookService.GetGenreAsync(GenreId);
+            return genre.Name;
+        }
+
+        public async Task<string> GetAuthorName()
+        {
+            var bookService = new BookStoreService();
+            var author = await bookService.GetAuthorAsync(AuthorId);
+            return author.Name;
+        }
+
     }
 }

@@ -68,6 +68,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\Constants.cs" />
+    <Compile Include="DataService\BookStoreService.cs" />
     <Compile Include="Helpers\ConfigHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -75,6 +76,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\AuthorModel.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\BookModel.cs" />
     <Compile Include="Models\GenreModel.cs" />
