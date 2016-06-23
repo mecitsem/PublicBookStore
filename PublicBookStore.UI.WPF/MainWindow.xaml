@@ -321,16 +321,16 @@
                                         <TextBlock Grid.Column="0" Grid.Row="4" Text="Price" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"></TextBlock>
                                         <!-- Captions End-->
                                         <!-- Values -->
-                                        <TextBlock Name="BookTitle" Grid.Column="1" Grid.Row="0"  Text="Title Value" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
-                                        <TextBlock Name="BookAuthor" Grid.Column="1" Grid.Row="1"  Text="Author Value" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
-                                        <TextBlock Name="BookGenre" Grid.Column="1" Grid.Row="2" Text="Genre Value" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
-                                        <TextBlock Name="BookPublished" Grid.Column="1" Grid.Row="3" Text="Published Value" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
-                                        <TextBlock Name="BookPrice" Grid.Column="1" Grid.Row="4" Text="Price Value" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Name="BookTitle" Grid.Column="1" Grid.Row="0"  Text="-" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Name="BookAuthor" Grid.Column="1" Grid.Row="1"  Text="-" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Name="BookGenre" Grid.Column="1" Grid.Row="2" Text="-" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Name="BookPublished" Grid.Column="1" Grid.Row="3" Text="-" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Name="BookPrice" Grid.Column="1" Grid.Row="4" Text="-" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
                                         <!-- Values End-->
                                     </Grid>
                                 </DockPanel>
 
-                                <TextBlock Name="BookDetail" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" Width="500" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Text="Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur."></TextBlock>
+                                <TextBlock Name="BookDetail" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" Width="500" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow"></TextBlock>
                                 <StackPanel Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2" Height="50" Orientation="Horizontal" HorizontalAlignment="Right">
                                     
                                     <ComboBox VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="50" Height="30">

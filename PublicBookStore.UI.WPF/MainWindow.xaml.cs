@@ -1,23 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Newtonsoft.Json;
 using PublicBookStore.UI.WPF.DataService;
-using PublicBookStore.UI.WPF.Helpers;
 using PublicBookStore.UI.WPF.Models;
 
 namespace PublicBookStore.UI.WPF
@@ -30,7 +15,7 @@ namespace PublicBookStore.UI.WPF
         #region Fields
 
         private List<GenreModel> _genreDataSource;
-        private BookStoreService service =new BookStoreService();
+        private BookStoreService _service = new BookStoreService();
         #endregion
 
         public MainWindow()
@@ -43,7 +28,7 @@ namespace PublicBookStore.UI.WPF
 
         private void HandleSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var genre = (GenreModel) GenreListBox.SelectedValue;
+            var genre = (GenreModel)GenreListBox.SelectedValue;
 
             if (genre != null)
             {
@@ -56,9 +41,9 @@ namespace PublicBookStore.UI.WPF
         {
             try
             {
-                var data = await service.GetGenresAsync();
+                var data = await _service.GetGenresAsync();
                 GenreListBox.DataContext = data;
-             
+
             }
             catch
             {
@@ -70,10 +55,10 @@ namespace PublicBookStore.UI.WPF
         {
             try
             {
-                var data = await service.GetBooksAsync(genreId);
-           
+                var data = await _service.GetBooksAsync(genreId);
+
                 BooksListBox.DataContext = data;
-           
+
             }
             catch
             {
@@ -88,7 +73,6 @@ namespace PublicBookStore.UI.WPF
         {
             BindGenres();
             BindBooks(0);
-           
         }
 
         private void ListBoxBooks_OnSelected(object sender, RoutedEventArgs e)
@@ -105,7 +89,7 @@ namespace PublicBookStore.UI.WPF
             BookTitle.Text = book.Title;
             BookAuthor.Text = await book.GetAuthorName();
             BookGenre.Text = await book.GetGenreName();
-            BookPrice.Text = $"$ {book.Price.ToString(CultureInfo.InvariantCulture)}"; 
+            BookPrice.Text = $"$ {book.Price.ToString(CultureInfo.InvariantCulture)}";
             BookPublished.Text = book.Published.ToString("yyyy-MM-dd");
             BookDetail.Text = book.Description;
         }
