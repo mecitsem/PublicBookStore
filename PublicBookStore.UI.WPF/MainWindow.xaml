@@ -5,24 +5,154 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PublicBookStore.UI.WPF"
         mc:Ignorable="d"
-        Title="Public Book Store" Height="350" Width="790.466" WindowState="Maximized" WindowStartupLocation="CenterScreen" Loaded="MainWindow_OnLoaded">
+        Title="Public Book Store" WindowState="Normal" MinWidth="1400" MaxWidth="1400" MinHeight="800" MaxHeight="800" WindowStartupLocation="CenterScreen" Loaded="MainWindow_OnLoaded">
     <Grid>
 
         <Grid.Resources>
 
             <XmlDataProvider x:Key="SamplesList"  XPath="" Source="samples.xml" />
 
+
+            <!-- BUTTON STYLE -->
+            <Style x:Key="AddToCartButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Background" Value="#ffffff"/>
+                <Setter Property="BorderBrush" Value="#cccccc"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Foreground" Value="#333333"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="16,3,16,3"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Name="Chrome"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="true">
+                                <ContentPresenter Name="Presenter" Margin="{TemplateBinding Padding}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    RecognizesAccessKey="True"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="#333333" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#dddddd" />
+                                    <Setter Property="BorderBrush" Value="#cccccc" />
+                                    <Setter Property="Foreground" Value="#333333" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#1ba1e2" />
+                                    <Setter Property="BorderBrush" Value="#1ba1e2"/>
+                                    <Setter Property="Foreground" Value="#ffffff"/>
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="true">
+                                    <Setter TargetName="Chrome" Property="BorderBrush" Value="#1ba1e2" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!-- BUTTON STYLE END -->
+
+            <!-- TEXT BLOCK STYLE -->
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="FontFamily" Value="Calibri" />
                 <Setter Property="FontSize" Value="10pt" />
             </Style>
+            <!-- TEXT BLOCK STYLE END-->
 
             <!--BOOK LIST CATALOG VIEW -->
             <Style x:Key="BookListStyle" TargetType="{x:Type ListBox}">
                 <Setter Property="ItemTemplate" Value="{DynamicResource BooksListItemTemplate}" />
                 <Setter Property="ItemContainerStyle" Value="{DynamicResource BooksListBokItem}" />
                 <Setter Property="BorderBrush" Value="Transparent" />
-                <Setter Property="Width" Value="{Binding ElementName=Books, Path=ActualWidth}"></Setter>
+                <Style.Resources>
+
+                    <Style x:Key="ScrollBarThumbVertical" TargetType="{x:Type Thumb}">
+                        <Setter Property="OverridesDefaultStyle" Value="true"/>
+                        <Setter Property="IsTabStop" Value="false"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Thumb}">
+                                    <Rectangle x:Name="rectangle" Fill="#FF7AAED3" Height="{TemplateBinding Height}" SnapsToDevicePixels="True" Width="{TemplateBinding Width}"/>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter Property="Fill" TargetName="rectangle" Value="#FF4474C9"/>
+                                        </Trigger>
+                                        <Trigger Property="IsDragging" Value="true">
+                                            <Setter Property="Fill" TargetName="rectangle" Value="#FF13804E"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <Style TargetType="RepeatButton">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="RepeatButton">
+                                    <Grid>
+                                        <ContentPresenter></ContentPresenter>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+                        <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+                        <Setter Property="BorderThickness" Value="1,0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                    <Grid x:Name="Bg" Width="8" Margin="10,15,0,15" Background="Transparent" SnapsToDevicePixels="true">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition  MaxHeight="0"/>
+                                            <RowDefinition Height="0.00001*"/>
+                                            <RowDefinition Height="0"/>
+                                        </Grid.RowDefinitions>
+                                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Background="Transparent" Grid.Row="1"/>
+                                        <RepeatButton Height="0" Width="0" x:Name="PART_LineUpButton" Command="{x:Static ScrollBar.LineUpCommand}" IsEnabled="{TemplateBinding IsMouseOver}"/>
+                                        <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsMouseOver}" Grid.Row="1">
+                                            <Track.DecreaseRepeatButton>
+                                                <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" />
+                                            </Track.DecreaseRepeatButton>
+                                            <Track.IncreaseRepeatButton>
+                                                <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" />
+                                            </Track.IncreaseRepeatButton>
+                                            <Track.Thumb>
+                                                <Thumb Style="{StaticResource ScrollBarThumbVertical}"/>
+                                            </Track.Thumb>
+                                        </Track>
+                                        <RepeatButton x:Name="PART_LineDownButton" Height="0" Width="0" Command="{x:Static ScrollBar.LineDownCommand}" IsEnabled="{TemplateBinding IsMouseOver}" Grid.Row="2"/>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <Style TargetType="{x:Type ScrollViewer}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate  TargetType="{x:Type ScrollViewer}">
+                                    <Grid x:Name="Grid"  HorizontalAlignment="Right">
+                                        <ScrollContentPresenter   x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" CanHorizontallyScroll="False" CanVerticallyScroll="False" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Margin="{TemplateBinding Padding}" />
+                                        <ScrollBar x:Name="PART_VerticalScrollBar" HorizontalAlignment="Right" AutomationProperties.AutomationId="VerticalScrollBar" Cursor="Arrow"  Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}"/>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Style.Resources>
             </Style>
             <DataTemplate x:Key="BooksListItemTemplate">
                 <StackPanel Background="Transparent">
@@ -33,21 +163,20 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="200"></ColumnDefinition>
                             <ColumnDefinition Width="400"></ColumnDefinition>
-                            <ColumnDefinition Width="100"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Image Source="{Binding Image}" MaxHeight="200" Grid.Column="0"></Image>
+                        <Image Source="{Binding Image}" MaxHeight="200" Grid.Column="0"
+                               d:DataContext="{d:DesignData }"></Image>
                         <StackPanel Grid.Column="1" Background="Transparent">
                             <TextBlock Text="{Binding Title}" FontSize="18" d:DataContext="{d:DesignData }"  />
                             <TextBlock Text="{Binding Description}" TextWrapping="Wrap" MaxWidth="400" HorizontalAlignment="Left" d:DataContext="{d:DesignData }"   />
                             <TextBlock Text="{Binding Price}" d:DataContext="{d:DesignData }"   Margin="0,10,0,0"/>
                             <TextBlock Text="{Binding Published}" d:DataContext="{d:DesignData }"   Margin="0,15,0,0"/>
                             <TextBlock Text="{Binding BookId}" d:DataContext="{d:DesignData }" Visibility="Collapsed"  ></TextBlock>
-                           
+
                         </StackPanel>
-                        <Button Width="100" Height="50" Content="Add to Cart" Grid.Column="2"></Button>
                     </Grid>
-                   
-                   
+
+
                 </StackPanel>
             </DataTemplate>
             <Style x:Key="BooksListBokItem" TargetType="{x:Type ListBoxItem}">
@@ -67,20 +196,19 @@
 
                                 </Trigger>
                                 <Trigger Property="IsFocused" Value="true">
-                                    <Setter Property="Background" Value="sc#1, 0.7605245, 0.7758222, 0.838799" />
-                                    <Setter Property="FontWeight" Value="bold" />
+                                    <Setter Property="Background" Value="#FFF5F2A8" />
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" Value="sc#1, 0.5394795, 0.597201765, 0.6866853" />
+                                    <Setter Property="Background" Value="sc#1, 0.7912979, 0.806952238, 0.838799" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style>
-            
+
             <!--BOOK LIST CATALOG VIEW END -->
-            
+
 
 
             <!--GENRE LIST VIEW -->
@@ -148,8 +276,62 @@
                             </ListBox>
                         </DockPanel>
                     </Grid>
-                    <DockPanel Name="Books" LastChildFill="False">
-                        <ListBox Name="BooksListBox" ItemsSource="{Binding}" Style="{DynamicResource BookListStyle}" IsSynchronizedWithCurrentItem="True"></ListBox>
+                    <DockPanel Name="Books" LastChildFill="False" HorizontalAlignment="Left">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                        <ListBox Name="BooksListBox" Grid.Column="0"  Width="620"  ItemsSource="{Binding}" Style="{DynamicResource BookListStyle}" IsSynchronizedWithCurrentItem="True"></ListBox>
+                        <DockPanel Grid.Column="1" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="200"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+
+                                </Grid.RowDefinitions>
+                                <Image x:Name="DetailImage" Source="{Binding Image}" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="10" Width="200"
+                                       d:DataContext="{d:DesignData}"></Image>
+                                <DockPanel Grid.Column="1" Grid.Row="0" Background="Transparent" Width="300">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="75"></ColumnDefinition>
+                                            <ColumnDefinition Width="225"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <Border Background="#FFE0E4E6" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"></Border>
+                                        <Border Background="#FFE0E4E6" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"></Border>
+                                        <!-- Captions -->
+                                        <TextBlock Grid.Column="0" Grid.Row="0"  Text="Title" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Grid.Column="0" Grid.Row="1"  Text="Author" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Grid.Column="0" Grid.Row="2" Text="Genre" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Grid.Column="0" Grid.Row="3" Text="Published" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Grid.Column="0" Grid.Row="4" Text="Price" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"></TextBlock>
+                                        <!-- Captions End-->
+                                        <!-- Values -->
+                                        <TextBlock Grid.Column="1" Grid.Row="0"  Text="Title Value" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Grid.Column="1" Grid.Row="1"  Text="Author Value" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Grid.Column="1" Grid.Row="2" Text="Genre Value" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Grid.Column="1" Grid.Row="3" Text="Published Value" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
+                                        <TextBlock Grid.Column="1" Grid.Row="4" Text="Price Value" VerticalAlignment="Center"  Margin="5,0,0,0"></TextBlock>
+                                        <!-- Values End-->
+                                    </Grid>
+                                </DockPanel>
+                                
+                                <TextBlock Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" Width="500" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Text="Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur."></TextBlock>
+                            </Grid>
+                        </DockPanel>
                     </DockPanel>
                 </DockPanel>
             </Grid>
